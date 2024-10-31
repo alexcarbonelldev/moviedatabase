@@ -3,7 +3,7 @@ package com.bd.bd.feature.home
 import androidx.lifecycle.viewModelScope
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
-import com.bd.domain.usecase.GetBestSellerBooks
+import com.bd.domain.usecase.GetPopularBooks
 import com.bd.ui.mvi.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getBestSellerBooks: GetBestSellerBooks
+    private val getPopularBooks: GetPopularBooks
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewAction>(
     HomeViewState.Loading
 ) {
@@ -21,12 +21,14 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onViewAction(viewAction: HomeViewAction) {
-        TODO("Not yet implemented")
+        when (viewAction) {
+            is HomeViewAction.OnBookClicked -> addEvent(HomeViewEvent.NavToDetail(viewAction.bookId))
+        }
     }
 
     private fun initBestSellerBooks() {
         viewModelScope.launch {
-            getBestSellerBooks()
+            getPopularBooks()
                 .onSuccess { updateState(HomeViewState.Success(topBooks = it)) }
                 .onFailure { updateState(HomeViewState.Error) }
         }

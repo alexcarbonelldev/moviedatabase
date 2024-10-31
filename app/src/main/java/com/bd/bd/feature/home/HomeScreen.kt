@@ -21,18 +21,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.domain.model.Book
 import com.bd.ui.design_system.component.CardItemUi
+import com.bd.ui.mvi.ViewEventObserver
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    navToDetail: (String) -> Unit
 ) {
+    viewModel.ViewEventObserver { event ->
+        when (event) {
+            is HomeViewEvent.NavToDetail -> navToDetail(event.bookId)
+        }
+    }
+
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
-    HomeScreen(viewState)
+    HomeScreen(
+        viewState,
+        viewModel::onViewAction
+    )
 }
 
 @Composable
 private fun HomeScreen(
-    viewState: HomeViewState
+    viewState: HomeViewState,
+    onViewAction: (HomeViewAction) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -41,7 +53,10 @@ private fun HomeScreen(
             when (viewState) {
                 HomeViewState.Error -> Text("Error")
                 HomeViewState.Loading -> Loading()
-                is HomeViewState.Success -> Success(viewState)
+                is HomeViewState.Success -> Success(
+                    viewState = viewState,
+                    onViewAction = onViewAction
+                )
             }
         }
     }
@@ -57,30 +72,43 @@ private fun Loading() {
 }
 
 @Composable
-private fun Success(viewState: HomeViewState.Success) {
+private fun Success(
+    viewState: HomeViewState.Success,
+    onViewAction: (HomeViewAction) -> Unit
+) {
     Column {
         Text(
             modifier = Modifier.padding(16.dp),
-            text = "Top Books",
+            text = "Popular books",
             style = TextStyle(
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 32.sp
+                fontSize = 28.sp
             )
         )
         LazyRow(Modifier.padding(horizontal = 4.dp)) {
             items(viewState.topBooks.size) { i ->
-                BookItem(viewState.topBooks[i])
+                val book = viewState.topBooks[i]
+                BookItem(
+                    book = book,
+                    onClick = {
+                        onViewAction(HomeViewAction.OnBookClicked(book.id))
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun BookItem(book: Book) {
+private fun BookItem(
+    book: Book,
+    onClick: () -> Unit
+) {
     val authors = book.authors.joinToString(", ")
     CardItemUi(
-        book.imageUrl,
-        book.title,
-        authors
+        imageUrl = book.imageUrl,
+        title = book.title,
+        description = authors,
+        onClick = onClick
     )
 }

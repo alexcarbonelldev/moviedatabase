@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.safeargs)
 }
 
 android {
@@ -49,6 +51,8 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
+
+    implementation(libs.kotlin.serialization)
 
     implementation(libs.hiltAndroid)
     implementation(libs.hiltNavigationCompose)

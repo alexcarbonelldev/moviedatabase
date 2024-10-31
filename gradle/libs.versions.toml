@@ -20,6 +20,8 @@ retrofit = "2.9.0"
 okhttp = "4.11.0"
 coil = "2.7.0"
 constraintLayoutCompose = "1.1.0"
+kotlinSerialization = "1.5.1"
+navigationCompose = "2.8.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +50,8 @@ retrofit_gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 constraint-layout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintLayoutCompose" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [bundles]
 retrofit = ["retrofit", "retrofit_gson", "okhttp"]
@@ -62,7 +66,8 @@ compose = [
     "androidx-ui-test-junit4",
     "androidx-material3",
     "coil",
-    "constraint-layout-compose"
+    "constraint-layout-compose",
+    "compose-navigation"
 ]
 
 [plugins]
@@ -74,3 +79,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = 'com.google.dagger.hilt.android', version.ref = "hilt" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationCompose" }

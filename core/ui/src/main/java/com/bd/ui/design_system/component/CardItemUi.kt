@@ -24,6 +24,7 @@ fun CardItemUi(
     imageUrl: String?,
     title: String,
     description: String,
+    onClick: () -> Unit
 ) {
     val cardWidth = 160.dp
     Card(
@@ -31,16 +32,14 @@ fun CardItemUi(
         elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .padding(8.dp),
-        onClick = {}
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
         ) {
-            AsyncImage(
+            AsyncImageUi(
                 modifier = Modifier.size(cardWidth),
-                model = imageUrl,
-                contentDescription = "Item image",
-                contentScale = ContentScale.Crop
+                imageUrl = imageUrl,
             )
             Column(
                 modifier = Modifier
