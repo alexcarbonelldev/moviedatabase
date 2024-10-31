@@ -21,3 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Books Database"
 include(":app")
+include(":core:common")
+include(":core:domain")
+include(":core:data")
+include(":core:ui")
