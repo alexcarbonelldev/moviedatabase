@@ -3,7 +3,7 @@ package com.bd.bd.feature.home
 import androidx.lifecycle.viewModelScope
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
-import com.bd.domain.usecase.GetPopularBooks
+import com.bd.domain.usecase.GetPopularMovies
 import com.bd.ui.mvi.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPopularBooks: GetPopularBooks
+    private val getPopularMovies: GetPopularMovies
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewAction>(
     HomeViewState.Loading
 ) {
@@ -28,8 +28,8 @@ class HomeViewModel @Inject constructor(
 
     private fun initBestSellerBooks() {
         viewModelScope.launch {
-            getPopularBooks()
-                .onSuccess { updateState(HomeViewState.Success(topBooks = it)) }
+            getPopularMovies()
+                .onSuccess { updateState(HomeViewState.Success(topMovies = it)) }
                 .onFailure { updateState(HomeViewState.Error) }
         }
     }

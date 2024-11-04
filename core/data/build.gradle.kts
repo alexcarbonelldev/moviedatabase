@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.android.library)
@@ -10,11 +12,22 @@ android {
     namespace = "com.bd.data"
     compileSdk = 35
 
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk = 29
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val keystoreFile = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val apiKey = properties.getProperty("TMDB_API_KEY") ?: ""
+        buildConfigField(type = "String", name = "TMDB_API_KEY", value = apiKey)
     }
 
     buildTypes {

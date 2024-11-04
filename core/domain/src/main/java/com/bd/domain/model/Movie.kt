@@ -1,8 +1,8 @@
 package com.bd.domain.model
 
-data class Book(
+data class Movie(
     val id: String,
     val title: String,
     val imageUrl: String?,
-    val authors: List<String>
+    val rating: Float
 )

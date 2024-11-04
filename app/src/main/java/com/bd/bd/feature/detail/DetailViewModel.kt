@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
-import com.bd.domain.usecase.GetBookDetail
+import com.bd.domain.usecase.GetMovieDetail
 import com.bd.ui.mvi.BaseViewModel
 import com.bd.ui.mvi.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getBookDetail: GetBookDetail,
+    private val getMovieDetail: GetMovieDetail,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailViewState, DetailViewEvent, DetailViewAction>(
     DetailViewState.Loading
@@ -21,9 +21,8 @@ class DetailViewModel @Inject constructor(
     private val args: DetailDestination = savedStateHandle.toRoute()
 
     init {
-        println("Book Id: ${args.bookId}")
         launch {
-            getBookDetail(args.bookId)
+            getMovieDetail(args.bookId)
                 .onSuccess {
                     println("Book Detail: $it")
                 }

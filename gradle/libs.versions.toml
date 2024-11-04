@@ -48,13 +48,14 @@ hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compo
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit_gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp_logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 constraint-layout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintLayoutCompose" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [bundles]
-retrofit = ["retrofit", "retrofit_gson", "okhttp"]
+retrofit = ["retrofit", "retrofit_gson", "okhttp", "okhttp_logging"]
 compose = [
     "androidx-lifecycle-runtime-compose",
     "androidx-activity-compose",

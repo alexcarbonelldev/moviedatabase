@@ -1,4 +1,4 @@
-package com.bd.data.remote
+package com.bd.data.remote.common
 
 import retrofit2.HttpException
 

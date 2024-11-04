@@ -13,15 +13,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bd.domain.model.Book
+import com.bd.bd.R
+import com.bd.domain.model.Movie
 import com.bd.ui.design_system.component.CardItemUi
 import com.bd.ui.mvi.ViewEventObserver
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -79,17 +82,17 @@ private fun Success(
     Column {
         Text(
             modifier = Modifier.padding(16.dp),
-            text = "Popular books",
+            text = stringResource(R.string.popular_movies),
             style = TextStyle(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 28.sp
             )
         )
         LazyRow(Modifier.padding(horizontal = 4.dp)) {
-            items(viewState.topBooks.size) { i ->
-                val book = viewState.topBooks[i]
-                BookItem(
-                    book = book,
+            items(viewState.topMovies.size) { i ->
+                val book = viewState.topMovies[i]
+                MediaItem(
+                    movie = book,
                     onClick = {
                         onViewAction(HomeViewAction.OnBookClicked(book.id))
                     }
@@ -100,15 +103,14 @@ private fun Success(
 }
 
 @Composable
-private fun BookItem(
-    book: Book,
+private fun MediaItem(
+    movie: Movie,
     onClick: () -> Unit
 ) {
-    val authors = book.authors.joinToString(", ")
     CardItemUi(
-        imageUrl = book.imageUrl,
-        title = book.title,
-        description = authors,
+        imageUrl = movie.imageUrl,
+        title = movie.title,
+        description = String.format(locale = Locale.getDefault(), "%.1f", movie.rating),
         onClick = onClick
     )
 }

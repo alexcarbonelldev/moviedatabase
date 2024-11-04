@@ -1,7 +1,7 @@
 package com.bd.bd.di
 
-import com.bd.data.repository.BookRepositoryImpl
-import com.bd.domain.repository.BookRepository
+import com.bd.data.repository.MovieRepositoryImpl
+import com.bd.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 interface RepositoryModule {
 
     @Binds
-    fun bindBookRepository(bookRepositoryImpl: BookRepositoryImpl): BookRepository
+    fun bindBookRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
 }
