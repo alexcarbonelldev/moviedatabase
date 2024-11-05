@@ -30,7 +30,15 @@ class DetailViewModel @Inject constructor(
                             description = it.description,
                             imageUrl = it.imageUrl ?: "",
                             backgroundImageUrl = it.backgroundImageUrl ?: "",
-                            rating = it.rating
+                            rating = it.rating,
+                            genres = it.genres,
+                            recommendations = it.recommendations.map { recommendation ->
+                                RecommendedMovieUiModel(
+                                    recommendation.id,
+                                    recommendation.imageUrl,
+                                    recommendation.rating
+                                )
+                            }
                         )
                     )
                 }
@@ -41,6 +49,10 @@ class DetailViewModel @Inject constructor(
     }
 
     override fun onViewAction(viewAction: DetailViewAction) {
-        TODO("Not yet implemented")
+        when (viewAction) {
+            is DetailViewAction.OnRecommendedMovieClicked -> {
+                addEvent(DetailViewEvent.NavToMovie(viewAction.id))
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.bd.bd.feature.home
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -102,11 +103,11 @@ private fun Success(
                 count = viewState.topMovies.size,
                 key = { viewState.topMovies[it].id }
             ) { i ->
-                val book = viewState.topMovies[i]
+                val movie = viewState.topMovies[i]
                 MediaItem(
-                    movie = book,
+                    movie = movie,
                     onClick = {
-                        onViewAction(HomeViewAction.OnBookClicked(book.id))
+                        onViewAction(HomeViewAction.OnBookClicked(movie.id))
                     }
                 )
             }
@@ -120,6 +121,9 @@ private fun MediaItem(
     onClick: () -> Unit
 ) {
     CardItemUiComponent(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
         imageUrl = movie.imageUrl,
         rating = movie.rating,
         onClick = onClick

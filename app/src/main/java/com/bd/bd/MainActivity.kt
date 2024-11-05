@@ -42,7 +42,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composableWithTransition<DetailDestination> {
                             DetailScreen(
-                                onBackClick = { navController.popBackStack() }
+                                onBackClick = { navController.popBackStack() },
+                                navToDetail = { navController.navigateToDetail(it) }
                             )
                         }
                     }

@@ -2,7 +2,6 @@ package com.bd.data.remote
 
 import android.content.Context
 import com.bd.data.BuildConfig
-import com.bd.data.remote.interceptor.ApiKeyInterceptor
 import com.bd.data.remote.interceptor.CacheInterceptor
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Cache
@@ -30,7 +29,6 @@ class RetrofitClient @Inject constructor(
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             addInterceptor(loggingInterceptor)
         }
-        addInterceptor(ApiKeyInterceptor())
         addInterceptor(CacheInterceptor())
     }.build()
 
