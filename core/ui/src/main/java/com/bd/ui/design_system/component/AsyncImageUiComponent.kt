@@ -2,15 +2,16 @@ package com.bd.ui.design_system.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 
-
 @Composable
-fun AsyncImageUi(
+fun AsyncImageUiComponent(
     imageUrl: String?,
     modifier: Modifier = Modifier
 ) {
@@ -25,11 +26,13 @@ fun AsyncImageUi(
 //        .fallback(placeholder)
         .diskCachePolicy(CachePolicy.ENABLED)
         .memoryCachePolicy(CachePolicy.ENABLED)
+        .crossfade(500)
         .build()
     AsyncImage(
         modifier = modifier,
         model = imageRequest,
-        contentDescription = "Item image",
-        contentScale = ContentScale.Crop
+        contentDescription = "Image",
+        contentScale = ContentScale.Crop,
+        placeholder = ColorPainter(Color.Black)
     )
 }

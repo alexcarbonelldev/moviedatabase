@@ -10,7 +10,8 @@ import com.bd.domain.model.MovieDetail
 import javax.inject.Inject
 
 class MovieDataSource @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val movieImageResolver: MovieImageResolver
 ) {
 
     suspend fun getPopularMovies(): Either<List<Movie>> = safeApiCall { apiService.getPopularMovies() }
@@ -24,7 +25,10 @@ class MovieDataSource @Inject constructor(
         return MovieDetail(
             id = id.toString(),
             title = title,
-            imageUrl = IMAGE_BASE_URL_SMALL + poster,
+            description = overview,
+            imageUrl = movieImageResolver.getImageUrl(posterPath, MovieImageResolver.ImageSize.M),
+            backgroundImageUrl = movieImageResolver.getImageUrl(backdropPath, MovieImageResolver.ImageSize.XL),
+            rating = rating
         )
     }
 
@@ -32,11 +36,7 @@ class MovieDataSource @Inject constructor(
         Movie(
             id = id.toString(),
             title = title,
-            imageUrl = IMAGE_BASE_URL_SMALL + poster,
+            imageUrl = movieImageResolver.getImageUrl(posterPath, MovieImageResolver.ImageSize.M),
             rating = rating
         )
-
-    private companion object {
-        const val IMAGE_BASE_URL_SMALL = "https://image.tmdb.org/t/p/w185/"
-    }
 }

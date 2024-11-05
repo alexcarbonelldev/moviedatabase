@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,9 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
 import com.bd.domain.model.Movie
-import com.bd.ui.design_system.component.CardItemUi
+import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
-import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -56,7 +57,7 @@ private fun HomeScreen(
             when (viewState) {
                 HomeViewState.Error -> Text("Error")
                 HomeViewState.Loading -> Loading()
-                is HomeViewState.Success -> Success(
+                is HomeViewState.Content -> Success(
                     viewState = viewState,
                     onViewAction = onViewAction
                 )
@@ -76,9 +77,11 @@ private fun Loading() {
 
 @Composable
 private fun Success(
-    viewState: HomeViewState.Success,
+    viewState: HomeViewState.Content,
     onViewAction: (HomeViewAction) -> Unit
 ) {
+    val gridState = rememberLazyGridState()
+
     Column {
         Text(
             modifier = Modifier.padding(16.dp),
@@ -88,8 +91,17 @@ private fun Success(
                 fontSize = 28.sp
             )
         )
-        LazyRow(Modifier.padding(horizontal = 4.dp)) {
-            items(viewState.topMovies.size) { i ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            state = gridState,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 4.dp)
+        ) {
+            items(
+                count = viewState.topMovies.size,
+                key = { viewState.topMovies[it].id }
+            ) { i ->
                 val book = viewState.topMovies[i]
                 MediaItem(
                     movie = book,
@@ -107,10 +119,9 @@ private fun MediaItem(
     movie: Movie,
     onClick: () -> Unit
 ) {
-    CardItemUi(
+    CardItemUiComponent(
         imageUrl = movie.imageUrl,
-        title = movie.title,
-        description = String.format(locale = Locale.getDefault(), "%.1f", movie.rating),
+        rating = movie.rating,
         onClick = onClick
     )
 }

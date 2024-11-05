@@ -29,7 +29,10 @@ class HomeViewModel @Inject constructor(
     private fun initBestSellerBooks() {
         viewModelScope.launch {
             getPopularMovies()
-                .onSuccess { updateState(HomeViewState.Success(topMovies = it)) }
+                .onSuccess {
+                    it.forEach { movie -> println(movie) }
+                    updateState(HomeViewState.Content(topMovies = it))
+                }
                 .onFailure { updateState(HomeViewState.Error) }
         }
     }

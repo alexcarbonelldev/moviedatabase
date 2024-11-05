@@ -22,9 +22,17 @@ class DetailViewModel @Inject constructor(
 
     init {
         launch {
-            getMovieDetail(args.bookId)
+            getMovieDetail(args.movieId)
                 .onSuccess {
-                    println("Book Detail: $it")
+                    updateState(
+                        DetailViewState.Content(
+                            title = it.title,
+                            description = it.description,
+                            imageUrl = it.imageUrl ?: "",
+                            backgroundImageUrl = it.backgroundImageUrl ?: "",
+                            rating = it.rating
+                        )
+                    )
                 }
                 .onFailure {
                     println("Error: $it")

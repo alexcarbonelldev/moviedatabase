@@ -9,7 +9,7 @@ sealed class HomeViewState : ViewState {
     data object Error : HomeViewState()
 
     @Immutable
-    data class Success(
+    data class Content(
         val topMovies: List<Movie>
     ) : HomeViewState()
 }

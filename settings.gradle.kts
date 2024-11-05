@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Books Database"
+rootProject.name = "Movies Database"
 include(":app")
 include(":core:common")
 include(":core:domain")

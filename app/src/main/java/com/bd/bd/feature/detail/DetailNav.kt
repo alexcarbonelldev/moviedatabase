@@ -5,7 +5,7 @@ import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DetailDestination(val bookId: String)
+data class DetailDestination(val movieId: String)
 
 fun NavController.navigateToDetail(
     bookId: String,
