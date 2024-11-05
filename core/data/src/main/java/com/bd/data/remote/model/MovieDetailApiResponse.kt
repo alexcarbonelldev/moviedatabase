@@ -12,7 +12,7 @@ data class MovieDetailApiResponse(
     @SerializedName("poster_path")
     val posterPath: String,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("release_date")
     val release: String,
     @SerializedName("vote_average")

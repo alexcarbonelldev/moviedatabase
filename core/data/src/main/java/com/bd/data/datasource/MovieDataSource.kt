@@ -28,7 +28,9 @@ class MovieDataSource @Inject constructor(
             title = title,
             description = overview,
             imageUrl = movieImageResolver.getImageUrl(posterPath, MovieImageResolver.ImageSize.M),
-            backgroundImageUrl = movieImageResolver.getImageUrl(backdropPath, MovieImageResolver.ImageSize.XL),
+            backgroundImageUrl = backdropPath?.let {
+                movieImageResolver.getImageUrl(it, MovieImageResolver.ImageSize.XL)
+            },
             rating = rating,
             genres = genres.map { it.name },
             recommendations = recommendations.movies.map { it.mapToMovie() }
