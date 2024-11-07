@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,57 +76,53 @@ private fun DetailContent(
     onBackClick: () -> Unit,
     onRecommendedMovieClick: (id: String, mediaType: MediaType) -> Unit
 ) {
-    Scaffold { contentPadding ->
-        Box(
-            modifier = Modifier.padding(contentPadding)
-        ) {
-            val scrollState = rememberScrollState()
-            val scrollValuePx = remember(scrollState.value) { scrollState.value }
-            val scrollValueDp = scrollValuePx.toDp()
+    Box {
+        val scrollState = rememberScrollState()
+        val scrollValuePx = remember(scrollState.value) { scrollState.value }
+        val scrollValueDp = scrollValuePx.toDp()
 
-            Box(
-                modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.verticalScroll(scrollState)
             ) {
-                Column(
-                    modifier = Modifier.verticalScroll(scrollState)
-                ) {
-                    Header(scrollValueDp, content)
-                    Column(modifier = Modifier.padding(vertical = 16.dp)) {
-                        GenresRow(content.genres)
-                        Text(
-                            text = content.title,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp)
-                                .padding(horizontal = 16.dp),
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = content.description,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        Recommendations(
-                            content.recommendations,
-                            onRecommendedMovieClick = onRecommendedMovieClick
-                        )
-                    }
+                Header(scrollValueDp, content)
+                Column(modifier = Modifier.padding(vertical = 16.dp)) {
+                    GenresRow(content.genres)
+                    Text(
+                        text = content.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = content.description,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    Recommendations(
+                        content.recommendations,
+                        onRecommendedMovieClick = onRecommendedMovieClick
+                    )
                 }
             }
+        }
 
-            val topBarAlpha: Float = remember(scrollValueDp) { (1 - (scrollValueDp / 160)).takeIf { it >= 0f } ?: 0f }
-            if (topBarAlpha > 0) {
-                CustomTopBarUiComponent(
-                    modifier = Modifier
-                        .alpha(topBarAlpha),
-                    onBackClick = onBackClick
-                )
-            }
+        val topBarAlpha: Float = remember(scrollValueDp) { (1 - (scrollValueDp / 160)).takeIf { it >= 0f } ?: 0f }
+        if (topBarAlpha > 0) {
+            CustomTopBarUiComponent(
+                modifier = Modifier
+                    .alpha(topBarAlpha),
+                onBackClick = onBackClick
+            )
         }
     }
 }

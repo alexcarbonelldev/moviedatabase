@@ -3,7 +3,6 @@ package com.bd.bd.feature.home
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -11,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,7 +26,7 @@ import com.bd.domain.model.getType
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
-enum class HomeSection {
+private enum class HomeSection {
     TRENDING_MOVIES,
     TRENDING_TV_SHOWS
 }
@@ -56,18 +54,14 @@ private fun HomeScreen(
     viewState: HomeViewState,
     onViewAction: (HomeViewAction) -> Unit
 ) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            when (viewState) {
-                HomeViewState.Error -> Unit // TODO: Create Error screen
-                HomeViewState.Loading -> Loading()
-                is HomeViewState.Content -> Success(
-                    viewState = viewState,
-                    onViewAction = onViewAction
-                )
-            }
+    Box {
+        when (viewState) {
+            HomeViewState.Error -> Unit // TODO: Create Error screen
+            HomeViewState.Loading -> Loading()
+            is HomeViewState.Content -> Success(
+                viewState = viewState,
+                onViewAction = onViewAction
+            )
         }
     }
 }
