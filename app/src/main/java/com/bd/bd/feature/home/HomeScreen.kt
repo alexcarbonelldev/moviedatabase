@@ -148,7 +148,7 @@ private fun Section(
                         onClick = { onRecommendedMediaClick(media.id, media.getType()) }
                     )
 
-                    if (index == mediaList.size - 1) {
+                    if (index == mediaList.lastIndex) {
                         Spacer(Modifier.width(16.dp))
                     }
                 }

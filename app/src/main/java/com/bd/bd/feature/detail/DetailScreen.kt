@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -93,20 +92,23 @@ private fun DetailContent(
                     modifier = Modifier.verticalScroll(scrollState)
                 ) {
                     Header(scrollValueDp, content)
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(vertical = 16.dp)) {
                         GenresRow(content.genres)
                         Text(
                             text = content.title,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 16.dp),
+                                .padding(top = 16.dp)
+                                .padding(horizontal = 16.dp),
                             textAlign = TextAlign.Start,
                             style = MaterialTheme.typography.titleLarge
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = content.description,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
                             textAlign = TextAlign.Start,
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -142,10 +144,8 @@ private fun Recommendations(
             text = stringResource(R.string.related_content),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = 16.dp,
-                    bottom = 8.dp
-                ),
+                .padding(top = 16.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.titleLarge
         )
@@ -154,6 +154,8 @@ private fun Recommendations(
                 items = recommendations,
                 key = { _, movie -> movie.id },
                 itemContent = { index, movie ->
+                    Spacer(Modifier.width(16.dp))
+
                     CardItemUiComponent(
                         imageUrl = movie.imageUrl,
                         rating = movie.rating,
@@ -161,7 +163,8 @@ private fun Recommendations(
                         imageWidth = 100.dp,
                         onClick = { onRecommendedMovieClick(movie.id, movie.mediaType) }
                     )
-                    if (index < recommendations.size - 1) {
+
+                    if (index == recommendations.lastIndex) {
                         Spacer(Modifier.width(16.dp))
                     }
                 }
@@ -228,7 +231,8 @@ private fun HeaderBackground(
 @Composable
 private fun GenresRow(genres: List<String>) {
     LazyRow(Modifier.fillMaxWidth()) {
-        items(genres) { genre ->
+        itemsIndexed(genres) { i, genre ->
+            Spacer(modifier = Modifier.width(16.dp))
             SuggestionChip(
                 onClick = { },
                 label = {
@@ -238,7 +242,10 @@ private fun GenresRow(genres: List<String>) {
                     )
                 }
             )
-            Spacer(modifier = Modifier.width(16.dp))
+
+            if (i == genres.lastIndex) {
+                Spacer(modifier = Modifier.width(16.dp))
+            }
         }
     }
 }
