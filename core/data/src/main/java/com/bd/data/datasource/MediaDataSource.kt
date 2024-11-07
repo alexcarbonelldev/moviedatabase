@@ -6,11 +6,13 @@ import com.bd.data.remote.common.safeApiCall
 import com.bd.data.remote.common.toEither
 import com.bd.data.remote.model.MediaDto
 import com.bd.data.remote.model.MovieDetailDto
+import com.bd.data.remote.model.TvShowDetailDto
 import com.bd.domain.model.Media
-import com.bd.domain.model.MovieDetail
+import com.bd.domain.model.MediaDetail
+import com.bd.domain.model.MediaType
 import javax.inject.Inject
 
-class MovieDataSource @Inject constructor(
+class MediaDataSource @Inject constructor(
     private val apiService: ApiService,
     private val movieImageResolver: MovieImageResolver
 ) {
@@ -20,12 +22,15 @@ class MovieDataSource @Inject constructor(
             apiResponse.results.map { mapToMedia(it) }
         }
 
-    suspend fun getMovieDetail(id: String): Either<MovieDetail> =
-        safeApiCall { apiService.getMovie(id) }
-            .toEither { it.mapToMovieDetail() }
+    suspend fun getMediaDetail(id: String, mediaType: MediaType): Either<MediaDetail> = safeApiCall {
+        when (mediaType) {
+            MediaType.MOVIE -> apiService.getMovieDetail(id).mapToDetail()
+            MediaType.TV_SHOW -> apiService.getTVShowDetail(id).mapToDetail()
+        }
+    }.toEither { it }
 
-    private fun MovieDetailDto.mapToMovieDetail(): MovieDetail {
-        return MovieDetail(
+    private fun MovieDetailDto.mapToDetail(): MediaDetail {
+        return MediaDetail.Movie(
             id = id.toString(),
             title = title,
             description = overview,
@@ -36,6 +41,21 @@ class MovieDataSource @Inject constructor(
             rating = rating,
             genres = genres.map { it.name },
             recommendations = recommendations.movies.map { mapToMovie(it) }
+        )
+    }
+
+    private fun TvShowDetailDto.mapToDetail(): MediaDetail {
+        return MediaDetail.TVShow(
+            id = id.toString(),
+            title = name,
+            description = overview,
+            imageUrl = movieImageResolver.getImageUrl(posterPath, MovieImageResolver.ImageSize.M),
+            backgroundImageUrl = backdropPath?.let {
+                movieImageResolver.getImageUrl(it, MovieImageResolver.ImageSize.XL)
+            },
+            rating = rating,
+            genres = genres.map { it.name },
+            recommendations = recommendations.tvShows.map { mapToTVShow(it) }
         )
     }
 

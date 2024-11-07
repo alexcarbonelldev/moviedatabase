@@ -21,3 +21,8 @@ sealed class Media(
         override val rating: Float
     ) : Media(id, title, imageUrl, rating)
 }
+
+fun Media.getType(): MediaType = when (this) {
+    is Media.Movie -> MediaType.MOVIE
+    is Media.TVShow -> MediaType.TV_SHOW
+}

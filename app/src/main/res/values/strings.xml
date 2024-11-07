@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Movies Database</string>
     <string name="popular_movies">Popular movies</string>
-    <string name="similar_movies">Similar movies</string>
+    <string name="related_content">Related content</string>
 </resources>

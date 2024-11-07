@@ -22,7 +22,12 @@ class HomeViewModel @Inject constructor(
 
     override fun onViewAction(viewAction: HomeViewAction) {
         when (viewAction) {
-            is HomeViewAction.OnBookClicked -> addEvent(HomeViewEvent.NavToDetail(viewAction.bookId))
+            is HomeViewAction.OnMediaClicked -> addEvent(
+                HomeViewEvent.NavToDetail(
+                    viewAction.mediaId,
+                    viewAction.mediaType
+                )
+            )
         }
     }
 

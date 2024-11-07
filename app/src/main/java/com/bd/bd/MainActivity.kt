@@ -37,13 +37,13 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composableWithTransition<HomeDestination> {
                             HomeScreen(
-                                navToDetail = { navController.navigateToDetail(it) }
+                                navToDetail = { id, mediaType -> navController.navigateToDetail(id, mediaType) }
                             )
                         }
                         composableWithTransition<DetailDestination> {
                             DetailScreen(
                                 onBackClick = { navController.popBackStack() },
-                                navToDetail = { navController.navigateToDetail(it) }
+                                navToDetail = { id, mediaType -> navController.navigateToDetail(id, mediaType) }
                             )
                         }
                     }

@@ -25,17 +25,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
 import com.bd.domain.model.Media
+import com.bd.domain.model.MediaType
+import com.bd.domain.model.getType
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navToDetail: (String) -> Unit
+    navToDetail: (id: String, mediaType: MediaType) -> Unit
 ) {
     viewModel.ViewEventObserver { event ->
         when (event) {
-            is HomeViewEvent.NavToDetail -> navToDetail(event.bookId)
+            is HomeViewEvent.NavToDetail -> navToDetail(event.mediaId, event.mediaType)
         }
     }
 
@@ -56,7 +58,7 @@ private fun HomeScreen(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (viewState) {
-                HomeViewState.Error -> Text("Error")
+                HomeViewState.Error -> Unit // TODO: Create Error screen
                 HomeViewState.Loading -> Loading()
                 is HomeViewState.Content -> Success(
                     viewState = viewState,
@@ -107,7 +109,12 @@ private fun Success(
                 MediaItem(
                     media = media,
                     onClick = {
-                        onViewAction(HomeViewAction.OnBookClicked(media.id))
+                        onViewAction(
+                            HomeViewAction.OnMediaClicked(
+                                media.id,
+                                media.getType()
+                            )
+                        )
                     }
                 )
             }

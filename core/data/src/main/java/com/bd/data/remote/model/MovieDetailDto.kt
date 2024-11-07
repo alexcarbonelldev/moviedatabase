@@ -18,13 +18,9 @@ data class MovieDetailDto(
     @SerializedName("vote_average")
     val rating: Float,
     @SerializedName("genres")
-    val genres: List<MovieGenreDto>,
+    val genres: List<GenreDto>,
     @SerializedName("recommendations")
     val recommendations: MovieRecommendationsDto
-)
-
-data class MovieGenreDto(
-    @SerializedName("name") val name: String
 )
 
 data class MovieRecommendationsDto(

@@ -1,6 +1,7 @@
 package com.bd.bd.feature.detail
 
 import androidx.compose.runtime.Immutable
+import com.bd.domain.model.MediaType
 import com.bd.ui.mvi.ViewState
 
 sealed class DetailViewState : ViewState {
@@ -16,13 +17,14 @@ sealed class DetailViewState : ViewState {
         val backgroundImageUrl: String,
         val rating: Float,
         val genres: List<String>,
-        val recommendations: List<RecommendedMovieUiModel>
+        val recommendations: List<RecommendedMediaUiModel>
     ) : DetailViewState()
 }
 
 @Immutable
-data class RecommendedMovieUiModel(
+data class RecommendedMediaUiModel(
     val id: String,
     val imageUrl: String?,
-    val rating: Float
+    val rating: Float,
+    val mediaType: MediaType
 )

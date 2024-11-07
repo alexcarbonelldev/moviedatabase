@@ -4,7 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
-import com.bd.domain.usecase.GetMovieDetail
+import com.bd.domain.model.getType
+import com.bd.domain.usecase.GetMediaDetail
 import com.bd.ui.mvi.BaseViewModel
 import com.bd.ui.mvi.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getMovieDetail: GetMovieDetail,
+    private val getMediaDetail: GetMediaDetail,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailViewState, DetailViewEvent, DetailViewAction>(
     DetailViewState.Loading
@@ -22,7 +23,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         launch {
-            getMovieDetail(args.movieId)
+            getMediaDetail(args.mediaId, args.mediaType)
                 .onSuccess {
                     updateState(
                         DetailViewState.Content(
@@ -33,10 +34,11 @@ class DetailViewModel @Inject constructor(
                             rating = it.rating,
                             genres = it.genres,
                             recommendations = it.recommendations.map { recommendation ->
-                                RecommendedMovieUiModel(
-                                    recommendation.id,
-                                    recommendation.imageUrl,
-                                    recommendation.rating
+                                RecommendedMediaUiModel(
+                                    id = recommendation.id,
+                                    imageUrl = recommendation.imageUrl,
+                                    rating = recommendation.rating,
+                                    mediaType = recommendation.getType()
                                 )
                             }
                         )
@@ -50,8 +52,8 @@ class DetailViewModel @Inject constructor(
 
     override fun onViewAction(viewAction: DetailViewAction) {
         when (viewAction) {
-            is DetailViewAction.OnRecommendedMovieClicked -> {
-                addEvent(DetailViewEvent.NavToMovie(viewAction.id))
+            is DetailViewAction.OnRecommendedMediaClick -> {
+                addEvent(DetailViewEvent.NavToMedia(viewAction.id, viewAction.mediaType))
             }
         }
     }
