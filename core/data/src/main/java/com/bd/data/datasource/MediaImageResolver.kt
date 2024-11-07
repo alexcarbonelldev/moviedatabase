@@ -2,7 +2,7 @@ package com.bd.data.datasource
 
 import javax.inject.Inject
 
-class MovieImageResolver @Inject constructor() {
+class MediaImageResolver @Inject constructor() {
 
     fun getImageUrl(path: String, size: ImageSize): String = IMAGE_BASE_URL + size.value + path
 
