@@ -19,8 +19,8 @@ fun CardItemUiComponent(
     rating: Float,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    imageHeight: Dp = 240.dp,
-    imageWidth: Dp? = null
+    imageHeight: Dp = 140.dp,
+    imageWidth: Dp = 100.dp
 ) {
     Card(
         modifier = modifier,
@@ -31,13 +31,10 @@ fun CardItemUiComponent(
         Box(
             modifier = Modifier
         ) {
-            val widthModifier = imageWidth?.let { Modifier.width(it) } ?: Modifier
-            val imageModifier = Modifier
-                .height(imageHeight)
-                .then(widthModifier)
-
             AsyncImageUiComponent(
-                modifier = imageModifier,
+                modifier = Modifier
+                    .height(imageHeight)
+                    .width(imageWidth),
                 imageUrl = imageUrl,
             )
             RatingUiComponent(

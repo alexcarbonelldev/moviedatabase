@@ -34,13 +34,15 @@ class MediaDataSource @Inject constructor(
             id = id.toString(),
             title = title,
             description = overview,
-            imageUrl = mediaImageResolver.getImageUrl(posterPath, MediaImageResolver.ImageSize.M),
+            imageUrl = posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
             backgroundImageUrl = backdropPath?.let {
                 mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.XL)
             },
             rating = rating,
             genres = genres.map { it.name },
-            recommendations = recommendations.movies.map { mapToMovie(it) }
+            recommendations = recommendations.movies
+                .map { mapToMovie(it) }
+                .filter { it.imageUrl != null }
         )
     }
 
@@ -49,13 +51,15 @@ class MediaDataSource @Inject constructor(
             id = id.toString(),
             title = name,
             description = overview,
-            imageUrl = mediaImageResolver.getImageUrl(posterPath, MediaImageResolver.ImageSize.M),
+            imageUrl = posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
             backgroundImageUrl = backdropPath?.let {
                 mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.XL)
             },
             rating = rating,
             genres = genres.map { it.name },
-            recommendations = recommendations.tvShows.map { mapToTVShow(it) }
+            recommendations = recommendations.tvShows
+                .map { mapToTVShow(it) }
+                .filter { it.imageUrl != null }
         )
     }
 
@@ -68,7 +72,7 @@ class MediaDataSource @Inject constructor(
         Media.Movie(
             id = movie.id.toString(),
             title = movie.title,
-            imageUrl = mediaImageResolver.getImageUrl(movie.posterPath, MediaImageResolver.ImageSize.M),
+            imageUrl = movie.posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
             rating = movie.voteAverage
         )
 
@@ -76,7 +80,7 @@ class MediaDataSource @Inject constructor(
         Media.TVShow(
             id = tvShow.id.toString(),
             title = tvShow.name,
-            imageUrl = mediaImageResolver.getImageUrl(tvShow.posterPath, MediaImageResolver.ImageSize.M),
+            imageUrl = tvShow.posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
             rating = tvShow.voteAverage
         )
 }

@@ -132,9 +132,11 @@ private fun DetailContent(
 
 @Composable
 private fun Recommendations(
-    movies: List<RecommendedMediaUiModel>,
+    recommendations: List<RecommendedMediaUiModel>,
     onRecommendedMovieClick: (id: String, mediaType: MediaType) -> Unit
 ) {
+    if (recommendations.isEmpty()) return
+
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         Text(
             text = stringResource(R.string.related_content),
@@ -149,17 +151,17 @@ private fun Recommendations(
         )
         LazyRow {
             itemsIndexed(
-                items = movies,
+                items = recommendations,
                 key = { _, movie -> movie.id },
                 itemContent = { index, movie ->
                     CardItemUiComponent(
-                        movie.imageUrl,
-                        movie.rating,
+                        imageUrl = movie.imageUrl,
+                        rating = movie.rating,
                         imageHeight = 140.dp,
                         imageWidth = 100.dp,
                         onClick = { onRecommendedMovieClick(movie.id, movie.mediaType) }
                     )
-                    if (index < movies.size - 1) {
+                    if (index < recommendations.size - 1) {
                         Spacer(Modifier.width(16.dp))
                     }
                 }

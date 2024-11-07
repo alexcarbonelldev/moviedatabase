@@ -2,13 +2,13 @@ package com.bd.bd.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,10 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
@@ -29,6 +27,11 @@ import com.bd.domain.model.MediaType
 import com.bd.domain.model.getType
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
+
+enum class HomeSection {
+    TRENDING_MOVIES,
+    TRENDING_TV_SHOWS
+}
 
 @Composable
 fun HomeScreen(
@@ -83,56 +86,73 @@ private fun Success(
     viewState: HomeViewState.Content,
     onViewAction: (HomeViewAction) -> Unit
 ) {
-    val gridState = rememberLazyGridState()
-
     Column {
         Text(
-            modifier = Modifier.padding(16.dp),
-            text = stringResource(R.string.popular_movies),
-            style = TextStyle(
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 28.sp
-            )
-        )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            state = gridState,
+            text = stringResource(R.string.trending),
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 4.dp)
-        ) {
-            items(
-                count = viewState.topMovies.size,
-                key = { viewState.topMovies[it].id }
-            ) { i ->
-                val media = viewState.topMovies[i]
-                MediaItem(
-                    media = media,
-                    onClick = {
-                        onViewAction(
-                            HomeViewAction.OnMediaClicked(
-                                media.id,
-                                media.getType()
-                            )
-                        )
-                    }
-                )
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .padding(horizontal = 16.dp),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.displaySmall
+        )
+        Section(
+            section = HomeSection.TRENDING_MOVIES,
+            mediaList = viewState.trendingMovies,
+            onRecommendedMediaClick = { id, mediaType ->
+                onViewAction(HomeViewAction.OnMediaClicked(id, mediaType))
             }
-        }
+        )
+        Section(
+            section = HomeSection.TRENDING_TV_SHOWS,
+            mediaList = viewState.trendingTvShows,
+            onRecommendedMediaClick = { id, mediaType ->
+                onViewAction(HomeViewAction.OnMediaClicked(id, mediaType))
+            }
+        )
     }
 }
 
 @Composable
-private fun MediaItem(
-    media: Media,
-    onClick: () -> Unit
+private fun Section(
+    section: HomeSection,
+    mediaList: List<Media>,
+    onRecommendedMediaClick: (id: String, mediaType: MediaType) -> Unit
 ) {
-    CardItemUiComponent(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        imageUrl = media.imageUrl,
-        rating = media.rating,
-        onClick = onClick
-    )
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
+        val titleResId = when (section) {
+            HomeSection.TRENDING_MOVIES -> R.string.movies
+            HomeSection.TRENDING_TV_SHOWS -> R.string.tv_shows
+        }
+        Text(
+            text = stringResource(titleResId),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.titleLarge
+        )
+        LazyRow {
+            itemsIndexed(
+                items = mediaList,
+                key = { _, media -> media.id },
+                itemContent = { index, media ->
+                    Spacer(Modifier.width(16.dp))
+
+                    CardItemUiComponent(
+                        imageUrl = media.imageUrl,
+                        rating = media.rating,
+                        imageHeight = 200.dp,
+                        imageWidth = 140.dp,
+                        onClick = { onRecommendedMediaClick(media.id, media.getType()) }
+                    )
+
+                    if (index == mediaList.size - 1) {
+                        Spacer(Modifier.width(16.dp))
+                    }
+                }
+            )
+        }
+    }
 }
