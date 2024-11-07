@@ -1,7 +1,7 @@
 package com.bd.bd.feature.home
 
 import androidx.compose.runtime.Immutable
-import com.bd.domain.model.Movie
+import com.bd.domain.model.Media
 import com.bd.ui.mvi.ViewState
 
 sealed class HomeViewState : ViewState {
@@ -10,6 +10,6 @@ sealed class HomeViewState : ViewState {
 
     @Immutable
     data class Content(
-        val topMovies: List<Movie>
+        val topMovies: List<Media>
     ) : HomeViewState()
 }

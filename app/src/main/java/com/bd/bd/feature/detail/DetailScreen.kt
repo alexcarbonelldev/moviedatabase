@@ -130,11 +130,11 @@ private fun DetailContent(
 }
 
 @Composable
-fun Recommendations(
+private fun Recommendations(
     movies: List<RecommendedMovieUiModel>,
     onRecommendedMovieClick: (id: String) -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
         Text(
             text = stringResource(R.string.similar_movies),
             modifier = Modifier

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
-import com.bd.domain.model.Movie
+import com.bd.domain.model.Media
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
@@ -103,11 +103,11 @@ private fun Success(
                 count = viewState.topMovies.size,
                 key = { viewState.topMovies[it].id }
             ) { i ->
-                val movie = viewState.topMovies[i]
+                val media = viewState.topMovies[i]
                 MediaItem(
-                    movie = movie,
+                    media = media,
                     onClick = {
-                        onViewAction(HomeViewAction.OnBookClicked(movie.id))
+                        onViewAction(HomeViewAction.OnBookClicked(media.id))
                     }
                 )
             }
@@ -117,15 +117,15 @@ private fun Success(
 
 @Composable
 private fun MediaItem(
-    movie: Movie,
+    media: Media,
     onClick: () -> Unit
 ) {
     CardItemUiComponent(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
-        imageUrl = movie.imageUrl,
-        rating = movie.rating,
+        imageUrl = media.imageUrl,
+        rating = media.rating,
         onClick = onClick
     )
 }

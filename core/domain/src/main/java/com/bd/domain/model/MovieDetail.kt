@@ -8,5 +8,5 @@ data class MovieDetail(
     val backgroundImageUrl: String?,
     val rating: Float,
     val genres: List<String>,
-    val recommendations: List<Movie>
+    val recommendations: List<Media.Movie>
 )

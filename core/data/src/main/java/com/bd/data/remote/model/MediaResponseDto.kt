@@ -2,8 +2,7 @@ package com.bd.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PopularMoviesApiResponse(
+data class MediaResponseDto(
     @SerializedName("results")
-    val popularMovies: List<MovieApiResponse>
+    val results: List<MediaDto>
 )
-

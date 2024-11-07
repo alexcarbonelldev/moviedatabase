@@ -2,7 +2,10 @@ package com.bd.data.remote
 
 import android.content.Context
 import com.bd.data.BuildConfig
+import com.bd.data.remote.adapter.MediaTypeAdapter
 import com.bd.data.remote.interceptor.CacheInterceptor
+import com.bd.data.remote.model.MediaDto
+import com.google.gson.GsonBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -22,27 +25,35 @@ class RetrofitClient @Inject constructor(
     private val cacheDirectory = File(context.cacheDir, "http_cache")
     private val cache = Cache(cacheDirectory, cacheSize.toLong())
 
-    private val okHttpClient = OkHttpClient.Builder().apply {
-        cache(cache)
-        if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-            addInterceptor(loggingInterceptor)
-        }
-        addInterceptor(CacheInterceptor())
-    }.build()
-
     val apiService: ApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(getOkHttpClient())
+            .addConverterFactory(getGsonConverterFactory())
             .build()
             .create(ApiService::class.java)
+    }
+
+    private fun getOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().apply {
+            cache(cache)
+            if (BuildConfig.DEBUG) {
+                val loggingInterceptor = HttpLoggingInterceptor()
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+                addInterceptor(loggingInterceptor)
+            }
+            addInterceptor(CacheInterceptor())
+        }.build()
+    }
+
+    private fun getGsonConverterFactory(): GsonConverterFactory {
+        val gson = GsonBuilder()
+            .registerTypeAdapter(MediaDto::class.java, MediaTypeAdapter())
+            .create()
+        return GsonConverterFactory.create(gson)
     }
 
     companion object {
         private const val BASE_URL = "https://api.themoviedb.org/"
     }
 }
-

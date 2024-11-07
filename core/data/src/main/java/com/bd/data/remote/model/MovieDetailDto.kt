@@ -2,7 +2,7 @@ package com.bd.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieDetailApiResponse(
+data class MovieDetailDto(
     @SerializedName("id")
     val id: Long,
     @SerializedName("title")
@@ -18,15 +18,15 @@ data class MovieDetailApiResponse(
     @SerializedName("vote_average")
     val rating: Float,
     @SerializedName("genres")
-    val genres: List<MovieGenreApiResponse>,
+    val genres: List<MovieGenreDto>,
     @SerializedName("recommendations")
-    val recommendations: MovieRecommendationsApiResponse
+    val recommendations: MovieRecommendationsDto
 )
 
-data class MovieGenreApiResponse(
+data class MovieGenreDto(
     @SerializedName("name") val name: String
 )
 
-data class MovieRecommendationsApiResponse(
-    @SerializedName("results") val movies: List<MovieApiResponse>
+data class MovieRecommendationsDto(
+    @SerializedName("results") val movies: List<MediaDto.Movie>
 )

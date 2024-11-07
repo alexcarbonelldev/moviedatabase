@@ -1,8 +1,23 @@
 package com.bd.domain.model
 
-data class Movie(
-    val id: String,
-    val title: String,
-    val imageUrl: String?,
-    val rating: Float
-)
+sealed class Media(
+    open val id: String,
+    open val title: String,
+    open val imageUrl: String?,
+    open val rating: Float
+) {
+
+    data class Movie(
+        override val id: String,
+        override val title: String,
+        override val imageUrl: String?,
+        override val rating: Float
+    ) : Media(id, title, imageUrl, rating)
+
+    data class TVShow(
+        override val id: String,
+        override val title: String,
+        override val imageUrl: String?,
+        override val rating: Float
+    ) : Media(id, title, imageUrl, rating)
+}

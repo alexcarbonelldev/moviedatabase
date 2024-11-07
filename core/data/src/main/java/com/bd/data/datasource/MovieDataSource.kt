@@ -4,9 +4,9 @@ import com.bd.common.Either
 import com.bd.data.remote.ApiService
 import com.bd.data.remote.common.safeApiCall
 import com.bd.data.remote.common.toEither
-import com.bd.data.remote.model.MovieApiResponse
-import com.bd.data.remote.model.MovieDetailApiResponse
-import com.bd.domain.model.Movie
+import com.bd.data.remote.model.MediaDto
+import com.bd.data.remote.model.MovieDetailDto
+import com.bd.domain.model.Media
 import com.bd.domain.model.MovieDetail
 import javax.inject.Inject
 
@@ -15,14 +15,16 @@ class MovieDataSource @Inject constructor(
     private val movieImageResolver: MovieImageResolver
 ) {
 
-    suspend fun getPopularMovies(): Either<List<Movie>> = safeApiCall { apiService.getPopularMovies() }
-        .toEither { apiResponse -> apiResponse.popularMovies.map { it.mapToMovie() } }
+    suspend fun getTrendingMedia(): Either<List<Media>> = safeApiCall { apiService.getTrendingMedia() }
+        .toEither { apiResponse ->
+            apiResponse.results.map { mapToMedia(it) }
+        }
 
-    suspend fun getMovie(id: String): Either<MovieDetail> =
+    suspend fun getMovieDetail(id: String): Either<MovieDetail> =
         safeApiCall { apiService.getMovie(id) }
             .toEither { it.mapToMovieDetail() }
 
-    private fun MovieDetailApiResponse.mapToMovieDetail(): MovieDetail {
+    private fun MovieDetailDto.mapToMovieDetail(): MovieDetail {
         return MovieDetail(
             id = id.toString(),
             title = title,
@@ -33,15 +35,28 @@ class MovieDataSource @Inject constructor(
             },
             rating = rating,
             genres = genres.map { it.name },
-            recommendations = recommendations.movies.map { it.mapToMovie() }
+            recommendations = recommendations.movies.map { mapToMovie(it) }
         )
     }
 
-    private fun MovieApiResponse.mapToMovie(): Movie =
-        Movie(
-            id = id.toString(),
-            title = title,
-            imageUrl = movieImageResolver.getImageUrl(posterPath, MovieImageResolver.ImageSize.M),
-            rating = rating
+    private fun mapToMedia(media: MediaDto) = when (media) {
+        is MediaDto.Movie -> mapToMovie(media)
+        is MediaDto.TVShow -> mapToTVShow(media)
+    }
+
+    private fun mapToMovie(movie: MediaDto.Movie): Media.Movie =
+        Media.Movie(
+            id = movie.id.toString(),
+            title = movie.title,
+            imageUrl = movieImageResolver.getImageUrl(movie.posterPath, MovieImageResolver.ImageSize.M),
+            rating = movie.voteAverage
+        )
+
+    private fun mapToTVShow(tvShow: MediaDto.TVShow): Media.TVShow =
+        Media.TVShow(
+            id = tvShow.id.toString(),
+            title = tvShow.name,
+            imageUrl = movieImageResolver.getImageUrl(tvShow.posterPath, MovieImageResolver.ImageSize.M),
+            rating = tvShow.voteAverage
         )
 }
