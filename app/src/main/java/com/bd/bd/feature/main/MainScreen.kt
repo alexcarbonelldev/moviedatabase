@@ -107,6 +107,8 @@ fun BottomBarUiComponent(
             NavigationBarItem(
                 selected = isSelected,
                 onClick = {
+                    if (currentRoute == tabBarItem.route) return@NavigationBarItem
+
                     navController.navigate(tabBarItem.route) {
                         popUpTo(homeTab.route) { inclusive = false }
                         launchSingleTop = true
