@@ -1,20 +1,27 @@
 package com.bd.bd.feature.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -85,41 +92,95 @@ private fun Results(
     viewState: SearchViewState,
     onItemClick: (id: String, type: ResultType) -> Unit,
 ) {
-    LazyColumn {
-        items(
-            count = viewState.results.size,
-            key = { i -> viewState.results[i].id }
-        ) { i ->
-            ResultItem(
-                item = viewState.results[i],
-                onItemClick = onItemClick
-            )
+
+    Crossfade(
+        targetState = viewState.resultsState,
+        label = "searchStateAnimation"
+    ) { resultsState ->
+        when (resultsState) {
+            is ResultsState.Content -> ResultsContent(resultsState, onItemClick)
+            ResultsState.Error -> Text("Error")
+            ResultsState.Initial -> Text("Initial")
+            ResultsState.Loading -> Text("Loading")
+            ResultsState.NotFound -> Text("Nothing found")
         }
     }
 }
 
 @Composable
-private fun ResultItem(
+private fun ResultsContent(
+    resultsState: ResultsState.Content,
+    onItemClick: (id: String, type: ResultType) -> Unit,
+) {
+    Box {
+        LazyColumn {
+            items(
+                count = resultsState.results.size,
+                key = { i -> resultsState.results[i].id }
+            ) { i ->
+                ResultItem(
+                    item = resultsState.results[i],
+                    onItemClick = onItemClick
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun LazyItemScope.ResultItem(
     item: SearchResultUiModel,
     onItemClick: (id: String, type: ResultType) -> Unit,
 ) {
     Row(
         Modifier
+            .animateItem()
             .clickable { onItemClick(item.id, item.type) }
             .padding(16.dp)
             .fillMaxWidth()
     ) {
+        val imageModifier = when (item.type) {
+            ResultType.MOVIE,
+            ResultType.TV_SHOW -> Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .size(height = 100.dp, width = 80.dp)
+
+            ResultType.PERSON -> Modifier
+                .clip(CircleShape)
+                .size(height = 80.dp, width = 80.dp)
+        }
+
         AsyncImageUiComponent(
-            modifier = Modifier
-                .size(height = 100.dp, width = 80.dp),
+            modifier = imageModifier,
             imageUrl = item.imageUrl,
         )
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = item.title,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyLarge,
-        )
+
+        when (item.type) {
+            ResultType.MOVIE,
+            ResultType.TV_SHOW -> {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .padding(vertical = 4.dp),
+                    text = item.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+
+            ResultType.PERSON -> {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterVertically),
+                    text = item.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+        }
     }
 }
