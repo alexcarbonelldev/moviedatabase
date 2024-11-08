@@ -1,4 +1,4 @@
-package com.bd.bd.ui.theme
+package com.bd.bd.common.ui.theme
 
 import android.app.Activity
 import android.os.Build

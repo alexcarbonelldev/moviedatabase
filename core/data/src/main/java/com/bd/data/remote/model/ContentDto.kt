@@ -2,7 +2,9 @@ package com.bd.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-sealed class MediaDto {
+sealed interface ContentDto
+
+sealed class MediaDto : ContentDto {
 
     data class Movie(
         @SerializedName("id") val id: Int,
@@ -18,3 +20,9 @@ sealed class MediaDto {
         @SerializedName("poster_path") val posterPath: String?
     ) : MediaDto()
 }
+
+data class PersonDto(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("profile_path") val profilePath: String?
+) : ContentDto

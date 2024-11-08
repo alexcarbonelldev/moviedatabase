@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bd.bd.feature.main.MainScreen
-import com.bd.bd.ui.theme.BooksDatabaseTheme
+import com.bd.bd.common.ui.theme.BooksDatabaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

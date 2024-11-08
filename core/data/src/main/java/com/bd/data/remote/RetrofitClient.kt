@@ -2,9 +2,9 @@ package com.bd.data.remote
 
 import android.content.Context
 import com.bd.data.BuildConfig
-import com.bd.data.remote.adapter.MediaTypeAdapter
+import com.bd.data.remote.adapter.ContentTypeAdapter
 import com.bd.data.remote.interceptor.CacheInterceptor
-import com.bd.data.remote.model.MediaDto
+import com.bd.data.remote.model.ContentDto
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Cache
@@ -48,7 +48,7 @@ class RetrofitClient @Inject constructor(
 
     private fun getGsonConverterFactory(): GsonConverterFactory {
         val gson = GsonBuilder()
-            .registerTypeAdapter(MediaDto::class.java, MediaTypeAdapter())
+            .registerTypeAdapter(ContentDto::class.java, ContentTypeAdapter())
             .create()
         return GsonConverterFactory.create(gson)
     }

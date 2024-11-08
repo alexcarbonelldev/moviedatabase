@@ -34,7 +34,7 @@ sealed class MediaDetail(
     ) : MediaDetail(id, title, description, imageUrl, backgroundImageUrl, rating, genres, recommendations)
 }
 
-fun MediaDetail.getType(): MediaType = when (this) {
-    is MediaDetail.Movie -> MediaType.MOVIE
-    is MediaDetail.TVShow -> MediaType.TV_SHOW
+fun MediaDetail.getType(): ContentType.Media = when (this) {
+    is MediaDetail.Movie -> ContentType.Media.Movie
+    is MediaDetail.TVShow -> ContentType.Media.TvShow
 }

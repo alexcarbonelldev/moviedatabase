@@ -13,4 +13,7 @@ object Icons {
 
     @DrawableRes
     val Search = R.drawable.ic_search_24
+
+    @DrawableRes
+    val Close = R.drawable.ic_close_24
 }

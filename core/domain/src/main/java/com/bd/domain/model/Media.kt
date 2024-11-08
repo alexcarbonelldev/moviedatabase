@@ -1,28 +1,37 @@
 package com.bd.domain.model
 
+sealed interface Content {
+    val id: String
+    val title: String
+    val imageUrl: String?
+}
+
 sealed class Media(
-    open val id: String,
-    open val title: String,
-    open val imageUrl: String?,
     open val rating: Float
-) {
+) : Content {
 
     data class Movie(
         override val id: String,
         override val title: String,
         override val imageUrl: String?,
         override val rating: Float
-    ) : Media(id, title, imageUrl, rating)
+    ) : Media(rating)
 
     data class TVShow(
         override val id: String,
         override val title: String,
         override val imageUrl: String?,
         override val rating: Float
-    ) : Media(id, title, imageUrl, rating)
+    ) : Media(rating)
 }
 
-fun Media.getType(): MediaType = when (this) {
-    is Media.Movie -> MediaType.MOVIE
-    is Media.TVShow -> MediaType.TV_SHOW
+data class Person(
+    override val id: String,
+    override val title: String,
+    override val imageUrl: String?,
+) : Content
+
+fun Media.getType(): ContentType.Media = when (this) {
+    is Media.Movie -> ContentType.Media.Movie
+    is Media.TVShow -> ContentType.Media.TvShow
 }

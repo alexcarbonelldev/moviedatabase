@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
-import com.bd.domain.model.MediaType
+import com.bd.domain.model.ContentType
 import com.bd.ui.common.toDp
 import com.bd.ui.design_system.component.AsyncImageUiComponent
 import com.bd.ui.design_system.component.CardItemUiComponent
@@ -46,13 +46,15 @@ private const val HEADER_BACKGROUND_HEIGHT = 300
 fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    navToDetail: (id: String, mediaType: MediaType) -> Unit
+    navToMovieDetail: (id: String) -> Unit,
+    navToTvShowDetail: (id: String) -> Unit
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     viewModel.ViewEventObserver { event ->
         when (event) {
-            is DetailViewEvent.NavToMedia -> navToDetail(event.id, event.mediaType)
+            is DetailViewEvent.NavToMovieDetail -> navToMovieDetail(event.id)
+            is DetailViewEvent.NavToTvShowDetail -> navToTvShowDetail(event.id)
         }
     }
 
@@ -60,7 +62,7 @@ fun DetailScreen(
         is DetailViewState.Content -> DetailContent(
             state as DetailViewState.Content,
             onBackClick = onBackClick,
-            onRecommendedMovieClick = { id, mediaType ->
+            onRecommendedMediaClick = { id, mediaType ->
                 viewModel.onViewAction(DetailViewAction.OnRecommendedMediaClick(id, mediaType))
             }
         )
@@ -74,7 +76,7 @@ fun DetailScreen(
 private fun DetailContent(
     content: DetailViewState.Content,
     onBackClick: () -> Unit,
-    onRecommendedMovieClick: (id: String, mediaType: MediaType) -> Unit
+    onRecommendedMediaClick: (id: String, mediaType: ContentType.Media) -> Unit
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -110,7 +112,7 @@ private fun DetailContent(
                     )
                     Recommendations(
                         content.recommendations,
-                        onRecommendedMovieClick = onRecommendedMovieClick
+                        onRecommendedMovieClick = onRecommendedMediaClick
                     )
                 }
             }
@@ -130,7 +132,7 @@ private fun DetailContent(
 @Composable
 private fun Recommendations(
     recommendations: List<RecommendedMediaUiModel>,
-    onRecommendedMovieClick: (id: String, mediaType: MediaType) -> Unit
+    onRecommendedMovieClick: (id: String, mediaType: ContentType.Media) -> Unit
 ) {
     if (recommendations.isEmpty()) return
 

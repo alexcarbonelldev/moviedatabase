@@ -1,7 +1,7 @@
 package com.bd.bd.feature.detail
 
 import androidx.compose.runtime.Immutable
-import com.bd.domain.model.MediaType
+import com.bd.domain.model.ContentType
 import com.bd.ui.mvi.ViewState
 
 sealed class DetailViewState : ViewState {
@@ -26,5 +26,5 @@ data class RecommendedMediaUiModel(
     val id: String,
     val imageUrl: String?,
     val rating: Float,
-    val mediaType: MediaType
+    val mediaType: ContentType.Media
 )

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
+import com.bd.domain.model.ContentType
 import com.bd.domain.model.getType
 import com.bd.domain.usecase.GetMediaDetail
 import com.bd.ui.mvi.BaseViewModel
@@ -23,7 +24,11 @@ class DetailViewModel @Inject constructor(
 
     init {
         launch {
-            getMediaDetail(args.mediaId, args.mediaType)
+            val mediaType = when (args.type) {
+                DetailType.MOVIE -> ContentType.Media.Movie
+                DetailType.TV_SHOW -> ContentType.Media.TvShow
+            }
+            getMediaDetail(args.mediaId, mediaType)
                 .onSuccess {
                     updateState(
                         DetailViewState.Content(
@@ -53,7 +58,10 @@ class DetailViewModel @Inject constructor(
     override fun onViewAction(viewAction: DetailViewAction) {
         when (viewAction) {
             is DetailViewAction.OnRecommendedMediaClick -> {
-                addEvent(DetailViewEvent.NavToMedia(viewAction.id, viewAction.mediaType))
+                when (viewAction.mediaType) {
+                    ContentType.Media.Movie -> DetailViewEvent.NavToMovieDetail(viewAction.id)
+                    ContentType.Media.TvShow -> DetailViewEvent.NavToTvShowDetail(viewAction.id)
+                }.let { addEvent(it) }
             }
         }
     }

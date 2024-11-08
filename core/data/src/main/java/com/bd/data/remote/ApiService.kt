@@ -5,6 +5,7 @@ import com.bd.data.remote.model.MovieDetailDto
 import com.bd.data.remote.model.TvShowDetailDto
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -16,4 +17,7 @@ interface ApiService {
 
     @GET("/3/tv/{id}${ApiKeyProvider.API_KEY_PARAM}&append_to_response=recommendations")
     suspend fun getTVShowDetail(@Path("id") id: String): TvShowDetailDto
+
+    @GET("/3/search/multi${ApiKeyProvider.API_KEY_PARAM}")
+    suspend fun searchContent(@Query("query") query: String): MediaResponseDto
 }

@@ -20,13 +20,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bd.bd.R
+import com.bd.bd.common.nav.mediaTypeArgNavType
 import com.bd.bd.feature.detail.DetailDestination
 import com.bd.bd.feature.detail.DetailScreen
-import com.bd.bd.feature.detail.navigateToDetail
+import com.bd.bd.feature.detail.navigateToMovieDetail
+import com.bd.bd.feature.detail.navigateToTvShowDetail
 import com.bd.bd.feature.home.HomeScreen
 import com.bd.bd.feature.search.SearchScreen
+import com.bd.domain.model.ContentType
 import com.bd.ui.design_system.Icons
 import com.bd.ui.navigation.composableWithTransition
+import kotlin.reflect.typeOf
 
 private val homeTab = BottomBarItem(
     title = R.string.home,
@@ -57,17 +61,21 @@ fun MainScreen() {
             ) {
                 composable(route = homeTab.route) {
                     HomeScreen(
-                        navToDetail = { id, mediaType -> navController.navigateToDetail(id, mediaType) }
+                        navToMovieDetail = { id -> navController.navigateToMovieDetail(id) },
+                        navToTvShowDetail = { id -> navController.navigateToTvShowDetail(id) },
                     )
                 }
                 composable(route = searchTab.route) {
                     SearchScreen()
                 }
 
-                composableWithTransition<DetailDestination> {
+                composableWithTransition<DetailDestination>(
+                    typeMap = mapOf(typeOf<ContentType.Media>() to mediaTypeArgNavType)
+                ) {
                     DetailScreen(
                         onBackClick = { navController.popBackStack() },
-                        navToDetail = { id, mediaType -> navController.navigateToDetail(id, mediaType) }
+                        navToMovieDetail = { id -> navController.navigateToMovieDetail(id) },
+                        navToTvShowDetail = { id -> navController.navigateToTvShowDetail(id) },
                     )
                 }
             }

@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class MediaResponseDto(
     @SerializedName("results")
-    val results: List<MediaDto>
+    val results: List<ContentDto>
 )

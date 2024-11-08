@@ -6,10 +6,13 @@ import com.bd.data.remote.common.safeApiCall
 import com.bd.data.remote.common.toEither
 import com.bd.data.remote.model.MediaDto
 import com.bd.data.remote.model.MovieDetailDto
+import com.bd.data.remote.model.PersonDto
 import com.bd.data.remote.model.TvShowDetailDto
+import com.bd.domain.model.Content
+import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
 import com.bd.domain.model.MediaDetail
-import com.bd.domain.model.MediaType
+import com.bd.domain.model.Person
 import javax.inject.Inject
 
 class MediaDataSource @Inject constructor(
@@ -19,15 +22,28 @@ class MediaDataSource @Inject constructor(
 
     suspend fun getTrendingMedia(): Either<List<Media>> = safeApiCall { apiService.getTrendingMedia() }
         .toEither { apiResponse ->
-            apiResponse.results.map { mapToMedia(it) }
+            apiResponse.results
+                .filterIsInstance<MediaDto>()
+                .map { mapToMedia(it) }
         }
 
-    suspend fun getMediaDetail(id: String, mediaType: MediaType): Either<MediaDetail> = safeApiCall {
+    suspend fun getMediaDetail(id: String, mediaType: ContentType.Media): Either<MediaDetail> = safeApiCall {
         when (mediaType) {
-            MediaType.MOVIE -> apiService.getMovieDetail(id).mapToDetail()
-            MediaType.TV_SHOW -> apiService.getTVShowDetail(id).mapToDetail()
+            ContentType.Media.Movie -> apiService.getMovieDetail(id).mapToDetail()
+            ContentType.Media.TvShow -> apiService.getTVShowDetail(id).mapToDetail()
         }
     }.toEither { it }
+
+    suspend fun searchContent(query: String): Either<List<Content>> = safeApiCall {
+        apiService.searchContent(query)
+    }.toEither { apiResponse ->
+        apiResponse.results.map {
+            when (it) {
+                is MediaDto -> mapToMedia(it)
+                is PersonDto -> mapToPerson(it)
+            }
+        }
+    }
 
     private fun MovieDetailDto.mapToDetail(): MediaDetail {
         return MediaDetail.Movie(
@@ -63,9 +79,9 @@ class MediaDataSource @Inject constructor(
         )
     }
 
-    private fun mapToMedia(media: MediaDto) = when (media) {
-        is MediaDto.Movie -> mapToMovie(media)
-        is MediaDto.TVShow -> mapToTVShow(media)
+    private fun mapToMedia(content: MediaDto) = when (content) {
+        is MediaDto.Movie -> mapToMovie(content)
+        is MediaDto.TVShow -> mapToTVShow(content)
     }
 
     private fun mapToMovie(movie: MediaDto.Movie): Media.Movie =
@@ -82,5 +98,12 @@ class MediaDataSource @Inject constructor(
             title = tvShow.name,
             imageUrl = tvShow.posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
             rating = tvShow.voteAverage
+        )
+
+    private fun mapToPerson(person: PersonDto): Person =
+        Person(
+            id = person.id.toString(),
+            title = person.name,
+            imageUrl = person.profilePath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },
         )
 }

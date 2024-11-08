@@ -1,11 +1,11 @@
 package com.bd.bd.feature.detail
 
-import com.bd.domain.model.MediaType
+import com.bd.domain.model.ContentType
 import com.bd.ui.mvi.ViewAction
 
-interface DetailViewAction : ViewAction {
+sealed interface DetailViewAction : ViewAction {
     data class OnRecommendedMediaClick(
         val id: String,
-        val mediaType: MediaType
+        val mediaType: ContentType.Media
     ) : DetailViewAction
 }

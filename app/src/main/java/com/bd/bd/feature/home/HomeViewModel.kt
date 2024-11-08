@@ -3,6 +3,7 @@ package com.bd.bd.feature.home
 import androidx.lifecycle.viewModelScope
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
+import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
 import com.bd.domain.usecase.GetTrendingMedia
 import com.bd.ui.mvi.BaseViewModel
@@ -23,12 +24,10 @@ class HomeViewModel @Inject constructor(
 
     override fun onViewAction(viewAction: HomeViewAction) {
         when (viewAction) {
-            is HomeViewAction.OnMediaClicked -> addEvent(
-                HomeViewEvent.NavToDetail(
-                    viewAction.mediaId,
-                    viewAction.mediaType
-                )
-            )
+            is HomeViewAction.OnMediaClicked -> when (viewAction.mediaType) {
+                ContentType.Media.Movie -> HomeViewEvent.NavToMovieDetail(viewAction.mediaId)
+                ContentType.Media.TvShow -> HomeViewEvent.NavToTvShowDetail(viewAction.mediaId)
+            }.let { addEvent(it) }
         }
     }
 

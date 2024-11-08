@@ -2,19 +2,29 @@ package com.bd.bd.feature.detail
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import com.bd.domain.model.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DetailDestination(
     val mediaId: String,
-    val mediaType: MediaType
+    val type: DetailType
 )
 
-fun NavController.navigateToDetail(
+enum class DetailType {
+    MOVIE,
+    TV_SHOW
+}
+
+fun NavController.navigateToMovieDetail(
     mediaId: String,
-    mediaType: MediaType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = DetailDestination(mediaId, mediaType), navOptions)
+    navigate(route = DetailDestination(mediaId, DetailType.MOVIE), navOptions)
+}
+
+fun NavController.navigateToTvShowDetail(
+    mediaId: String,
+    navOptions: NavOptions? = null,
+) {
+    navigate(route = DetailDestination(mediaId, DetailType.TV_SHOW), navOptions)
 }

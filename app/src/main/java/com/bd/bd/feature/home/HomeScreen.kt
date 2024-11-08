@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
+import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
-import com.bd.domain.model.MediaType
 import com.bd.domain.model.getType
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.mvi.ViewEventObserver
@@ -34,11 +34,13 @@ private enum class HomeSection {
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navToDetail: (id: String, mediaType: MediaType) -> Unit
+    navToMovieDetail: (id: String) -> Unit,
+    navToTvShowDetail: (id: String) -> Unit
 ) {
     viewModel.ViewEventObserver { event ->
         when (event) {
-            is HomeViewEvent.NavToDetail -> navToDetail(event.mediaId, event.mediaType)
+            is HomeViewEvent.NavToMovieDetail -> navToMovieDetail(event.id)
+            is HomeViewEvent.NavToTvShowDetail -> navToTvShowDetail(event.id)
         }
     }
 
@@ -111,7 +113,7 @@ private fun Success(
 private fun Section(
     section: HomeSection,
     mediaList: List<Media>,
-    onRecommendedMediaClick: (id: String, mediaType: MediaType) -> Unit
+    onRecommendedMediaClick: (id: String, mediaType: ContentType.Media) -> Unit
 ) {
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         val titleResId = when (section) {
