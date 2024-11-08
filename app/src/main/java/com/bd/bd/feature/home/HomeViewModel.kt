@@ -47,14 +47,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun splitTrendingList(list: List<Media>): Pair<List<Media.Movie>, List<Media.TVShow>> {
+    private fun splitTrendingList(list: List<Media>): Pair<List<Media.Movie>, List<Media.TvShow>> {
         val movies = mutableListOf<Media.Movie>()
-        val tvShows = mutableListOf<Media.TVShow>()
+        val tvShows = mutableListOf<Media.TvShow>()
 
         list.forEach { item ->
             when (item) {
                 is Media.Movie -> movies.add(item)
-                is Media.TVShow -> tvShows.add(item)
+                is Media.TvShow -> tvShows.add(item)
             }
         }
 

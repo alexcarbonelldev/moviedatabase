@@ -30,7 +30,7 @@ sealed class MediaDetail(
         override val backgroundImageUrl: String?,
         override val rating: Float,
         override val genres: List<String>,
-        override val recommendations: List<Media.TVShow>
+        override val recommendations: List<Media.TvShow>
     ) : MediaDetail(id, title, description, imageUrl, backgroundImageUrl, rating, genres, recommendations)
 }
 

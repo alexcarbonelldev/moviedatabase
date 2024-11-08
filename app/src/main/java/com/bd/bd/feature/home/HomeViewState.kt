@@ -11,6 +11,6 @@ sealed class HomeViewState : ViewState {
     @Immutable
     data class Content(
         val trendingMovies: List<Media.Movie>,
-        val trendingTvShows: List<Media.TVShow>,
+        val trendingTvShows: List<Media.TvShow>,
     ) : HomeViewState()
 }

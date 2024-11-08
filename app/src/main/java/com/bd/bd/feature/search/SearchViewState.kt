@@ -10,5 +10,12 @@ data class SearchViewState(
 data class SearchResultUiModel(
     val id: String,
     val title: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val type: ResultType
 )
+
+enum class ResultType {
+    MOVIE,
+    TV_SHOW,
+    PERSON
+}

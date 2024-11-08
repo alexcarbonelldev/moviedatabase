@@ -2,6 +2,8 @@ package com.bd.bd.feature.search
 
 import com.bd.common.onFailure
 import com.bd.common.onSuccess
+import com.bd.domain.model.Media
+import com.bd.domain.model.Person
 import com.bd.domain.usecase.SearchContent
 import com.bd.ui.mvi.BaseViewModel
 import com.bd.ui.mvi.launch
@@ -16,10 +18,7 @@ class SearchViewModel @Inject constructor(
     override fun onViewAction(viewAction: SearchViewAction) {
         when (viewAction) {
             is SearchViewAction.OnQueryChange -> onQueryChange(viewAction.query)
-            is SearchViewAction.OnItemClick -> {
-                viewState.value.results
-                    .firstOrNull { it.id == viewAction.id }
-            }
+            is SearchViewAction.OnItemClick -> onItemClick(viewAction)
         }
     }
 
@@ -29,16 +28,28 @@ class SearchViewModel @Inject constructor(
         if (query.length < 3) return
         launch {
             searchContent(query)
-                .onSuccess { result ->
-                    println("Search - Success")
-                    result.forEach { println("$it") }
-
+                .onSuccess { results ->
                     updateState(
                         viewState.value.copy(
-                            results = result.map { SearchResultUiModel(it.id, it.title, it.imageUrl) })
+                            results = results.map { item ->
+                                val type = when (item) {
+                                    is Media.Movie -> ResultType.MOVIE
+                                    is Media.TvShow -> ResultType.TV_SHOW
+                                    is Person -> ResultType.PERSON
+                                }
+                                SearchResultUiModel(item.id, item.title, item.imageUrl, type)
+                            })
                     )
                 }
                 .onFailure { println("Search - Failure: ${it.message}") }
+        }
+    }
+
+    private fun onItemClick(viewAction: SearchViewAction.OnItemClick) {
+        when (viewAction.resultType) {
+            ResultType.MOVIE -> addEvent(SearchViewEvent.NavToMovieDetail(viewAction.id))
+            ResultType.TV_SHOW -> addEvent(SearchViewEvent.NavToTvShowDetail(viewAction.id))
+            ResultType.PERSON -> Unit
         }
     }
 }

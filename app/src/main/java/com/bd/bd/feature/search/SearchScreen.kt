@@ -24,19 +24,32 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.bd.R
 import com.bd.ui.design_system.Icons
 import com.bd.ui.design_system.component.AsyncImageUiComponent
+import com.bd.ui.mvi.ViewEventObserver
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    navToMovieDetail: (String) -> Unit,
+    navToTvShowDetail: (String) -> Unit,
 ) {
+    viewModel.ViewEventObserver { event ->
+        when (event) {
+            is SearchViewEvent.NavToMovieDetail -> navToMovieDetail(event.id)
+            is SearchViewEvent.NavToTvShowDetail -> navToTvShowDetail(event.id)
+        }
+    }
+
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
     Column {
         SearchComponent(
             viewState = viewState,
-            onQueryChange = { viewModel.onViewAction(SearchViewAction.OnQueryChange(it)) }
+            onQueryChange = { viewModel.onViewAction(SearchViewAction.OnQueryChange(it)) },
         )
-        Results(viewState)
+        Results(
+            viewState = viewState,
+            onItemClick = { id, type -> viewModel.onViewAction(SearchViewAction.OnItemClick(id, type)) },
+        )
     }
 }
 
@@ -68,28 +81,42 @@ private fun SearchComponent(
 }
 
 @Composable
-private fun Results(viewState: SearchViewState) {
+private fun Results(
+    viewState: SearchViewState,
+    onItemClick: (id: String, type: ResultType) -> Unit,
+) {
     LazyColumn {
         items(
             count = viewState.results.size,
             key = { i -> viewState.results[i].id }
         ) { i ->
-            ResultItem(viewState.results[i])
+            ResultItem(
+                item = viewState.results[i],
+                onItemClick = onItemClick
+            )
         }
     }
 }
 
 @Composable
-private fun ResultItem(searchResult: SearchResultUiModel) {
-    Row(Modifier.padding(16.dp)) {
+private fun ResultItem(
+    item: SearchResultUiModel,
+    onItemClick: (id: String, type: ResultType) -> Unit,
+) {
+    Row(
+        Modifier
+            .clickable { onItemClick(item.id, item.type) }
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
         AsyncImageUiComponent(
             modifier = Modifier
                 .size(height = 100.dp, width = 80.dp),
-            imageUrl = searchResult.imageUrl,
+            imageUrl = item.imageUrl,
         )
         Text(
             modifier = Modifier.padding(start = 16.dp),
-            text = searchResult.title,
+            text = item.title,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge,

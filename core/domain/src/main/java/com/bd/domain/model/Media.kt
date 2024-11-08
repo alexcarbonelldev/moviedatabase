@@ -17,7 +17,7 @@ sealed class Media(
         override val rating: Float
     ) : Media(rating)
 
-    data class TVShow(
+    data class TvShow(
         override val id: String,
         override val title: String,
         override val imageUrl: String?,
@@ -33,5 +33,5 @@ data class Person(
 
 fun Media.getType(): ContentType.Media = when (this) {
     is Media.Movie -> ContentType.Media.Movie
-    is Media.TVShow -> ContentType.Media.TvShow
+    is Media.TvShow -> ContentType.Media.TvShow
 }

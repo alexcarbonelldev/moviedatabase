@@ -92,8 +92,8 @@ class MediaDataSource @Inject constructor(
             rating = movie.voteAverage
         )
 
-    private fun mapToTVShow(tvShow: MediaDto.TVShow): Media.TVShow =
-        Media.TVShow(
+    private fun mapToTVShow(tvShow: MediaDto.TVShow): Media.TvShow =
+        Media.TvShow(
             id = tvShow.id.toString(),
             title = tvShow.name,
             imageUrl = tvShow.posterPath?.let { mediaImageResolver.getImageUrl(it, MediaImageResolver.ImageSize.M) },

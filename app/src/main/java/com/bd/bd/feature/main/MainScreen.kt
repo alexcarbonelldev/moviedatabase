@@ -66,7 +66,10 @@ fun MainScreen() {
                     )
                 }
                 composable(route = searchTab.route) {
-                    SearchScreen()
+                    SearchScreen(
+                        navToMovieDetail = { id -> navController.navigateToMovieDetail(id) },
+                        navToTvShowDetail = { id -> navController.navigateToTvShowDetail(id) },
+                    )
                 }
 
                 composableWithTransition<DetailDestination>(
