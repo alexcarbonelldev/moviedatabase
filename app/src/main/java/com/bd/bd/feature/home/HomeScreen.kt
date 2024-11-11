@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bd.bd.R
 import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
 import com.bd.domain.model.getType
+import com.bd.ui.R
 import com.bd.ui.design_system.component.CardItemUiComponent
+import com.bd.ui.design_system.component.ErrorStateUiComponent
+import com.bd.ui.design_system.component.LoadingStateUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 private enum class HomeSection {
@@ -58,23 +59,17 @@ private fun HomeScreen(
 ) {
     Box {
         when (viewState) {
-            HomeViewState.Error -> Unit // TODO: Create Error screen
-            HomeViewState.Loading -> Loading()
+            HomeViewState.Error -> ErrorStateUiComponent(
+                onRetryClick = { onViewAction(HomeViewAction.OnRetryClick) }
+            )
+
+            HomeViewState.Loading -> LoadingStateUiComponent()
             is HomeViewState.Content -> Success(
                 viewState = viewState,
                 onViewAction = onViewAction
             )
         }
     }
-}
-
-@Composable
-private fun Loading() {
-    CircularProgressIndicator(
-        modifier = Modifier.width(64.dp),
-        color = MaterialTheme.colorScheme.secondary,
-        trackColor = MaterialTheme.colorScheme.surfaceVariant,
-    )
 }
 
 @Composable

@@ -24,34 +24,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         launch {
-            val mediaType = when (args.type) {
-                DetailType.MOVIE -> ContentType.Media.Movie
-                DetailType.TV_SHOW -> ContentType.Media.TvShow
-            }
-            getMediaDetail(args.mediaId, mediaType)
-                .onSuccess {
-                    updateState(
-                        DetailViewState.Content(
-                            title = it.title,
-                            description = it.description,
-                            imageUrl = it.imageUrl ?: "",
-                            backgroundImageUrl = it.backgroundImageUrl ?: "",
-                            rating = it.rating,
-                            genres = it.genres,
-                            recommendations = it.recommendations.map { recommendation ->
-                                RecommendedMediaUiModel(
-                                    id = recommendation.id,
-                                    imageUrl = recommendation.imageUrl,
-                                    rating = recommendation.rating,
-                                    mediaType = recommendation.getType()
-                                )
-                            }
-                        )
-                    )
-                }
-                .onFailure {
-                    println("Error: $it")
-                }
+            init()
         }
     }
 
@@ -63,6 +36,41 @@ class DetailViewModel @Inject constructor(
                     ContentType.Media.TvShow -> DetailViewEvent.NavToTvShowDetail(viewAction.id)
                 }.let { addEvent(it) }
             }
+
+            DetailViewAction.OnRetryClick -> launch { init() }
         }
+    }
+
+    private suspend fun init() {
+        updateState(DetailViewState.Loading)
+
+        val mediaType = when (args.type) {
+            DetailType.MOVIE -> ContentType.Media.Movie
+            DetailType.TV_SHOW -> ContentType.Media.TvShow
+        }
+        getMediaDetail(args.mediaId, mediaType)
+            .onSuccess {
+                updateState(
+                    DetailViewState.Content(
+                        title = it.title,
+                        description = it.description,
+                        imageUrl = it.imageUrl ?: "",
+                        backgroundImageUrl = it.backgroundImageUrl ?: "",
+                        rating = it.rating,
+                        genres = it.genres,
+                        recommendations = it.recommendations.map { recommendation ->
+                            RecommendedMediaUiModel(
+                                id = recommendation.id,
+                                imageUrl = recommendation.imageUrl,
+                                rating = recommendation.rating,
+                                mediaType = recommendation.getType()
+                            )
+                        }
+                    )
+                )
+            }
+            .onFailure {
+                updateState(DetailViewState.Error)
+            }
     }
 }

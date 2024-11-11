@@ -8,4 +8,6 @@ sealed interface DetailViewAction : ViewAction {
         val id: String,
         val mediaType: ContentType.Media
     ) : DetailViewAction
+
+    data object OnRetryClick : DetailViewAction
 }

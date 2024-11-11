@@ -1,5 +1,6 @@
 package com.bd.bd.feature.detail
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,12 +32,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bd.bd.R
 import com.bd.domain.model.ContentType
+import com.bd.ui.R
 import com.bd.ui.common.toDp
 import com.bd.ui.design_system.component.AsyncImageUiComponent
 import com.bd.ui.design_system.component.CardItemUiComponent
 import com.bd.ui.design_system.component.CustomTopBarUiComponent
+import com.bd.ui.design_system.component.ErrorStateUiComponent
+import com.bd.ui.design_system.component.LoadingStateUiComponent
 import com.bd.ui.design_system.component.RatingUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
@@ -49,7 +52,7 @@ fun DetailScreen(
     navToMovieDetail: (id: String) -> Unit,
     navToTvShowDetail: (id: String) -> Unit
 ) {
-    val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
     viewModel.ViewEventObserver { event ->
         when (event) {
@@ -58,17 +61,25 @@ fun DetailScreen(
         }
     }
 
-    when (state) {
-        is DetailViewState.Content -> DetailContent(
-            state as DetailViewState.Content,
-            onBackClick = onBackClick,
-            onRecommendedMediaClick = { id, mediaType ->
-                viewModel.onViewAction(DetailViewAction.OnRecommendedMediaClick(id, mediaType))
-            }
-        )
+    Crossfade(
+        targetState = viewState,
+        label = "detailScreenAnimation"
+    ) { state ->
+        when (state) {
+            is DetailViewState.Content -> DetailContent(
+                state,
+                onBackClick = onBackClick,
+                onRecommendedMediaClick = { id, mediaType ->
+                    viewModel.onViewAction(DetailViewAction.OnRecommendedMediaClick(id, mediaType))
+                }
+            )
 
-        is DetailViewState.Error -> Unit // DetailError()
-        is DetailViewState.Loading -> Unit //  DetailLoading()
+            is DetailViewState.Error -> ErrorStateUiComponent(
+                onRetryClick = { viewModel.onViewAction(DetailViewAction.OnRetryClick) }
+            )
+
+            is DetailViewState.Loading -> LoadingStateUiComponent()
+        }
     }
 }
 

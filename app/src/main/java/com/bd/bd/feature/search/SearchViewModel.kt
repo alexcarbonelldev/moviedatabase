@@ -39,6 +39,7 @@ class SearchViewModel @Inject constructor(
         when (viewAction) {
             is SearchViewAction.OnQueryChange -> onQueryChange(viewAction.query)
             is SearchViewAction.OnItemClick -> onItemClick(viewAction)
+            SearchViewAction.OnRetryClick -> launch { executeQuery(queryStateFlow.value) }
         }
     }
 
@@ -84,6 +85,6 @@ class SearchViewModel @Inject constructor(
     }
 
     private companion object {
-        const val DEBOUNCE_MILLIS = 500L
+        const val DEBOUNCE_MILLIS = 800L
     }
 }

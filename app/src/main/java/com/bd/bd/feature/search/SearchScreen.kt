@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,13 +25,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.bd.bd.R
+import com.bd.ui.R
 import com.bd.ui.design_system.Icons
 import com.bd.ui.design_system.component.AsyncImageUiComponent
+import com.bd.ui.design_system.component.ErrorStateUiComponent
+import com.bd.ui.design_system.component.LoadingStateUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 @Composable
@@ -55,7 +59,7 @@ fun SearchScreen(
         )
         Results(
             viewState = viewState,
-            onItemClick = { id, type -> viewModel.onViewAction(SearchViewAction.OnItemClick(id, type)) },
+            onViewAction = { viewModel.onViewAction(it) }
         )
     }
 }
@@ -90,7 +94,7 @@ private fun SearchComponent(
 @Composable
 private fun Results(
     viewState: SearchViewState,
-    onItemClick: (id: String, type: ResultType) -> Unit,
+    onViewAction: (SearchViewAction) -> Unit
 ) {
 
     Crossfade(
@@ -98,11 +102,14 @@ private fun Results(
         label = "searchStateAnimation"
     ) { resultsState ->
         when (resultsState) {
-            is ResultsState.Content -> ResultsContent(resultsState, onItemClick)
-            ResultsState.Error -> Text("Error")
-            ResultsState.Initial -> Text("Initial")
-            ResultsState.Loading -> Text("Loading")
-            ResultsState.NotFound -> Text("Nothing found")
+            is ResultsState.Content -> ResultsContent(resultsState, onViewAction)
+            ResultsState.Error -> ErrorStateUiComponent(
+                onRetryClick = { onViewAction.invoke(SearchViewAction.OnRetryClick) }
+            )
+
+            ResultsState.Initial -> Initial()
+            ResultsState.Loading -> LoadingStateUiComponent()
+            ResultsState.NotFound -> NoResultsFound()
         }
     }
 }
@@ -110,7 +117,7 @@ private fun Results(
 @Composable
 private fun ResultsContent(
     resultsState: ResultsState.Content,
-    onItemClick: (id: String, type: ResultType) -> Unit,
+    onViewAction: (SearchViewAction) -> Unit,
 ) {
     Box {
         LazyColumn {
@@ -120,13 +127,12 @@ private fun ResultsContent(
             ) { i ->
                 ResultItem(
                     item = resultsState.results[i],
-                    onItemClick = onItemClick
+                    onItemClick = { id, type -> onViewAction(SearchViewAction.OnItemClick(id, type)) }
                 )
             }
         }
     }
 }
-
 
 @Composable
 private fun LazyItemScope.ResultItem(
@@ -182,5 +188,31 @@ private fun LazyItemScope.ResultItem(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun NoResultsFound() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            modifier = Modifier
+                .padding(24.dp)
+                .align(Alignment.Center),
+            text = stringResource(R.string.no_results),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun Initial() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            modifier = Modifier
+                .padding(24.dp)
+                .align(Alignment.Center),
+            text = stringResource(R.string.search_placeholder),
+            textAlign = TextAlign.Center
+        )
     }
 }

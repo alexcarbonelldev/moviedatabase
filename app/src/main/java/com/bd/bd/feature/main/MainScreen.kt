@@ -19,7 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.bd.bd.R
+import com.bd.ui.R
 import com.bd.bd.common.nav.mediaTypeArgNavType
 import com.bd.bd.feature.detail.DetailDestination
 import com.bd.bd.feature.detail.DetailScreen
