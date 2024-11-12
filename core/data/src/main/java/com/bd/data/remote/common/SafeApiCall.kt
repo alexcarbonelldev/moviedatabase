@@ -10,7 +10,5 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ApiResponse<T> {
             message = e.message.orEmpty(),
             code = e.code()
         )
-    } catch (e: Exception) {
-        ApiResponse.Error(message = e.message.orEmpty())
     }
 }
