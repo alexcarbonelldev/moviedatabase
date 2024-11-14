@@ -22,6 +22,7 @@ navigationCompose = "2.8.3"
 okhttp = "4.12.0"
 retrofit = "2.9.0"
 javaxInject = "1"
+detekt = "1.23.7"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -86,3 +87,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationCompose" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+detekt = { id =  "io.gitlab.arturbosch.detekt", version.ref = "detekt"}

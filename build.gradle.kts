@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.js.backend.ast.JsEmpty.setSource
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -8,4 +10,18 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.safeargs) apply false
+    alias(libs.plugins.detekt)
+}
+
+detekt {
+    basePath = "${rootProject.projectDir}"
+    setSource(files("src/main/java"))
+    // config.setFrom("/config/detekt.yml")
+    parallel = true
+}
+
+subprojects {
+
+    // Apply the Detekt plugin to each subproject
+    apply(plugin = rootProject.libs.plugins.detekt.get().pluginId)
 }

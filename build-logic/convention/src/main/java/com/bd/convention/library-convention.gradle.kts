@@ -1,4 +1,5 @@
 import com.bd.convention.BuildConstants
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("java-library")
@@ -10,8 +11,9 @@ java {
     targetCompatibility = BuildConstants.JAVA_VERSION
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = BuildConstants.JVM_TARGET_VERSION
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(BuildConstants.JVM_TARGET)
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
     }
 }
