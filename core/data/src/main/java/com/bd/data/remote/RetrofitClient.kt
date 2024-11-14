@@ -21,7 +21,7 @@ class RetrofitClient @Inject constructor(
     @ApplicationContext context: Context
 ) {
 
-    private val cacheSize = 10 * 1024 * 1024 // 10 MB
+    private val cacheSize: Int = 10 * 1024 * 1024 // 10 MB
     private val cacheDirectory = File(context.cacheDir, "http_cache")
     private val cache = Cache(cacheDirectory, cacheSize.toLong())
 

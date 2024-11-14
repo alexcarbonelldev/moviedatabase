@@ -1,4 +1,4 @@
-package com.bd.ui.design_system
+package com.bd.ui.designsystem
 
 import androidx.annotation.DrawableRes
 import com.bd.ui.R

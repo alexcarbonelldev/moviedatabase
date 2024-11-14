@@ -1,4 +1,4 @@
-package com.bd.ui.design_system.component
+package com.bd.ui.designsystem.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.bd.ui.designsystem.component.rating.RatingUiComponent
+import com.bd.ui.designsystem.component.rating.RatingUiComponentSize
 
 @Composable
 fun CardItemUiComponent(

@@ -35,15 +35,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.domain.model.ContentType
 import com.bd.ui.R
 import com.bd.ui.common.toDp
-import com.bd.ui.design_system.component.AsyncImageUiComponent
-import com.bd.ui.design_system.component.CardItemUiComponent
-import com.bd.ui.design_system.component.CustomTopBarUiComponent
-import com.bd.ui.design_system.component.ErrorStateUiComponent
-import com.bd.ui.design_system.component.LoadingStateUiComponent
-import com.bd.ui.design_system.component.RatingUiComponent
+import com.bd.ui.designsystem.component.AsyncImageUiComponent
+import com.bd.ui.designsystem.component.CardItemUiComponent
+import com.bd.ui.designsystem.component.CustomTopBarUiComponent
+import com.bd.ui.designsystem.component.ErrorStateUiComponent
+import com.bd.ui.designsystem.component.LoadingStateUiComponent
+import com.bd.ui.designsystem.component.rating.RatingUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 private const val HEADER_BACKGROUND_HEIGHT = 300
+private const val SCROLL_HEIGHT = 160
 
 @Composable
 fun DetailScreen(
@@ -129,7 +130,9 @@ private fun DetailContent(
             }
         }
 
-        val topBarAlpha: Float = remember(scrollValueDp) { (1 - (scrollValueDp / 160)).takeIf { it >= 0f } ?: 0f }
+        val topBarAlpha: Float = remember(scrollValueDp) {
+            (1 - (scrollValueDp / SCROLL_HEIGHT)).takeIf { it >= 0f } ?: 0f
+        }
         if (topBarAlpha > 0) {
             CustomTopBarUiComponent(
                 modifier = Modifier

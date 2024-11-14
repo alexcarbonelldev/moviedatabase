@@ -1,4 +1,4 @@
-package com.bd.ui.design_system.component
+package com.bd.ui.designsystem.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

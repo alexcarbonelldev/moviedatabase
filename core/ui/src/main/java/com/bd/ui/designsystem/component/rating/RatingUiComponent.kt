@@ -1,4 +1,4 @@
-package com.bd.ui.design_system.component
+package com.bd.ui.designsystem.component.rating
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bd.common.extensions.toStringWithDecimals
 import com.bd.ui.common.circleLayout
-import com.bd.ui.common.hexToColor
 
 private const val BACKGROUND_ALPHA = 0.6f
 private const val BORDER_STROKE_WIDTH = 2
@@ -67,7 +66,7 @@ fun RatingUiComponent(
         }
 
         val stringValue = when (value) {
-            10f -> "10"
+            RatingColor.VALUE_10.number.toFloat() -> value.toInt().toString()
             else -> value.toStringWithDecimals()
         }
         Text(
@@ -78,41 +77,22 @@ fun RatingUiComponent(
     }
 }
 
-private sealed class RatingColor(val color: Color) {
-    data object Value10 : RatingColor("#12AD49".hexToColor())
-    data object Value9 : RatingColor("#61B458".hexToColor())
-    data object Value8 : RatingColor("#90D22A".hexToColor())
-    data object Value7 : RatingColor("#CBE00C".hexToColor())
-    data object Value6 : RatingColor("#F7DD02".hexToColor())
-    data object Value5 : RatingColor("#F6B304".hexToColor())
-    data object Value4 : RatingColor("#F77600".hexToColor())
-    data object Value3 : RatingColor("#EF3806".hexToColor())
-    data object Value2 : RatingColor("#EA0B0B".hexToColor())
-    data object Value1 : RatingColor("#D3012A".hexToColor())
-}
-
-private fun mapRatingToColor(rating: Float): Color = when (rating.toInt()) {
-    10 -> RatingColor.Value10.color
-    9 -> RatingColor.Value9.color
-    8 -> RatingColor.Value8.color
-    7 -> RatingColor.Value7.color
-    6 -> RatingColor.Value6.color
-    5 -> RatingColor.Value5.color
-    4 -> RatingColor.Value4.color
-    3 -> RatingColor.Value3.color
-    2 -> RatingColor.Value2.color
-    else -> RatingColor.Value1.color
+private fun mapRatingToColor(rating: Float): Color {
+    return getRatingColorEnumByNumber(rating.toInt())?.color
+        ?: RatingColor.VALUE_1.color
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 @Preview
 private fun PreviewSmall() {
+    val min = 1
+    val max = 10
     FlowRow {
-        for (i in 1..10) {
+        for (i in min..max) {
             RatingUiComponent(i.toFloat(), RatingUiComponentSize.SMALL)
 
-            if (i != 10) {
+            if (i != max) {
                 Spacer(Modifier.height(8.dp))
                 RatingUiComponent(i.toFloat() + 0.5f, RatingUiComponentSize.SMALL)
                 Spacer(Modifier.height(8.dp))
@@ -125,11 +105,13 @@ private fun PreviewSmall() {
 @Composable
 @Preview
 private fun PreviewMedium() {
+    val min = 1
+    val max = 10
     FlowRow {
-        for (i in 1..10) {
+        for (i in min..max) {
             RatingUiComponent(i.toFloat(), RatingUiComponentSize.MEDIUM)
 
-            if (i != 10) {
+            if (i != max) {
                 Spacer(Modifier.height(8.dp))
                 RatingUiComponent(i.toFloat() + 0.5f, RatingUiComponentSize.MEDIUM)
                 Spacer(Modifier.height(8.dp))

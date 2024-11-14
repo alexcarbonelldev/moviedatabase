@@ -1,4 +1,4 @@
-package com.bd.ui.design_system.component
+package com.bd.ui.designsystem.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -7,12 +7,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults.MediumAppBarCollapsedHeight
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
-import com.bd.ui.design_system.Icons
+import com.bd.ui.designsystem.Icons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

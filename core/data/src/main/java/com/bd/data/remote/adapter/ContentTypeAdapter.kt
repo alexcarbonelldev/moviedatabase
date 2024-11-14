@@ -13,7 +13,7 @@ import com.google.gson.stream.JsonWriter
 class ContentTypeAdapter : TypeAdapter<ContentDto>() {
 
     override fun write(out: JsonWriter?, value: ContentDto?) {
-        throw Exception("Not supported")
+        throw UnsupportedOperationException("Not supported method, only read is supported")
     }
 
     override fun read(input: JsonReader): ContentDto? {

@@ -28,7 +28,7 @@ import com.bd.bd.feature.detail.navigateToTvShowDetail
 import com.bd.bd.feature.home.HomeScreen
 import com.bd.bd.feature.search.SearchScreen
 import com.bd.domain.model.ContentType
-import com.bd.ui.design_system.Icons
+import com.bd.ui.designsystem.Icons
 import com.bd.ui.navigation.composableWithTransition
 import kotlin.reflect.typeOf
 

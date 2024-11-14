@@ -31,10 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.ui.R
-import com.bd.ui.design_system.Icons
-import com.bd.ui.design_system.component.AsyncImageUiComponent
-import com.bd.ui.design_system.component.ErrorStateUiComponent
-import com.bd.ui.design_system.component.LoadingStateUiComponent
+import com.bd.ui.designsystem.Icons
+import com.bd.ui.designsystem.component.AsyncImageUiComponent
+import com.bd.ui.designsystem.component.ErrorStateUiComponent
+import com.bd.ui.designsystem.component.LoadingStateUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 @Composable

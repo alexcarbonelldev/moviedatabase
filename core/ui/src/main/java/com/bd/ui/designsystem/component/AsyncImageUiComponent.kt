@@ -1,4 +1,4 @@
-package com.bd.ui.design_system.component
+package com.bd.ui.designsystem.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,6 +9,8 @@ import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+
+private const val CROSS_FADE_DURATION_MILLIS = 500
 
 @Composable
 fun AsyncImageUiComponent(
@@ -26,7 +28,7 @@ fun AsyncImageUiComponent(
 //        .fallback(placeholder)
         .diskCachePolicy(CachePolicy.ENABLED)
         .memoryCachePolicy(CachePolicy.ENABLED)
-        .crossfade(500)
+        .crossfade(CROSS_FADE_DURATION_MILLIS)
         .build()
     AsyncImage(
         modifier = modifier,

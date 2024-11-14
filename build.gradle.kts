@@ -16,7 +16,7 @@ plugins {
 detekt {
     basePath = "${rootProject.projectDir}"
     setSource(files("src/main/java"))
-    // config.setFrom("/config/detekt.yml")
+    config.setFrom("/config/detekt/detekt.yml")
     parallel = true
 }
 

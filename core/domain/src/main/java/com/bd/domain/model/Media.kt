@@ -6,23 +6,22 @@ sealed interface Content {
     val imageUrl: String?
 }
 
-sealed class Media(
-    open val rating: Float
-) : Content {
+sealed interface Media : Content {
+    val rating: Float
 
     data class Movie(
         override val id: String,
         override val title: String,
         override val imageUrl: String?,
         override val rating: Float
-    ) : Media(rating)
+    ) : Media
 
     data class TvShow(
         override val id: String,
         override val title: String,
         override val imageUrl: String?,
         override val rating: Float
-    ) : Media(rating)
+    ) : Media
 }
 
 data class Person(

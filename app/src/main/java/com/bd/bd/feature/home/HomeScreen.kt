@@ -22,9 +22,9 @@ import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
 import com.bd.domain.model.getType
 import com.bd.ui.R
-import com.bd.ui.design_system.component.CardItemUiComponent
-import com.bd.ui.design_system.component.ErrorStateUiComponent
-import com.bd.ui.design_system.component.LoadingStateUiComponent
+import com.bd.ui.designsystem.component.CardItemUiComponent
+import com.bd.ui.designsystem.component.ErrorStateUiComponent
+import com.bd.ui.designsystem.component.LoadingStateUiComponent
 import com.bd.ui.mvi.ViewEventObserver
 
 private enum class HomeSection {

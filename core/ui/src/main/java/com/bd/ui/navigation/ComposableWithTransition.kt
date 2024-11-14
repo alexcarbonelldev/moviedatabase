@@ -35,7 +35,9 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithTransition(
     )
 }
 
-val defaultEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards EnterTransition?) =
+val defaultEnterTransition:
+        (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards EnterTransition?) =
     { fadeIn(tween(300)) }
-val defaultExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards ExitTransition?) =
+val defaultExitTransition:
+        (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards ExitTransition?) =
     { fadeOut(tween(300)) }

@@ -7,7 +7,6 @@ import com.bd.domain.model.ContentType
 private const val MOVIE_TYPE = "movie"
 private const val TV_SHOW_TYPE = "tv"
 
-val mediaTypeArgName = "mediaType"
 val mediaTypeArgNavType = object : NavType<ContentType.Media>(isNullableAllowed = false) {
 
     override fun get(bundle: Bundle, key: String): ContentType.Media? =

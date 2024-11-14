@@ -1,15 +1,15 @@
 package com.bd.domain.model
 
-sealed class MediaDetail(
-    open val id: String,
-    open val title: String,
-    open val description: String,
-    open val imageUrl: String?,
-    open val backgroundImageUrl: String?,
-    open val rating: Float,
-    open val genres: List<String>,
-    open val recommendations: List<Media>
-) {
+sealed interface MediaDetail {
+
+    val id: String
+    val title: String
+    val description: String
+    val imageUrl: String?
+    val backgroundImageUrl: String?
+    val rating: Float
+    val genres: List<String>
+    val recommendations: List<Media>
 
     data class Movie(
         override val id: String,
@@ -20,7 +20,7 @@ sealed class MediaDetail(
         override val rating: Float,
         override val genres: List<String>,
         override val recommendations: List<Media.Movie>
-    ) : MediaDetail(id, title, description, imageUrl, backgroundImageUrl, rating, genres, recommendations)
+    ) : MediaDetail
 
     data class TVShow(
         override val id: String,
@@ -31,10 +31,5 @@ sealed class MediaDetail(
         override val rating: Float,
         override val genres: List<String>,
         override val recommendations: List<Media.TvShow>
-    ) : MediaDetail(id, title, description, imageUrl, backgroundImageUrl, rating, genres, recommendations)
-}
-
-fun MediaDetail.getType(): ContentType.Media = when (this) {
-    is MediaDetail.Movie -> ContentType.Media.Movie
-    is MediaDetail.TVShow -> ContentType.Media.TvShow
+    ) : MediaDetail
 }
