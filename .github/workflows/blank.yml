@@ -17,6 +17,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    name: MR check
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -34,3 +35,7 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      # Fail test
+      - name: Fail test
+        run: exit 1
