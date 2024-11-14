@@ -260,3 +260,7 @@ private fun GenresRow(genres: List<String>) {
         }
     }
 }
+
+private fun DetektWarning() {
+    return Unit
+}
