@@ -21,6 +21,12 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 33
+          build-tools: 33.0.2
+
       - name: Make gradlew permission executable
         run: chmod +x ./gradlew
 
