@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("android-library-convention")
 
@@ -8,6 +10,14 @@ plugins {
 
 android {
     namespace = "com.bd.data"
+
+    defaultConfig {
+        val keystoreFile = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val apiKey = properties.getProperty("TMDB_API_KEY") ?: ""
+        buildConfigField(type = "String", name = "TMDB_API_KEY", value = "\"$apiKey\"")
+    }
 }
 
 dependencies {
