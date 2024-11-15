@@ -9,6 +9,9 @@ jobs:
     name: MR check
     runs-on: ubuntu-latest
     steps:
+      - name: Get local.properties from secrets
+        run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -24,15 +27,15 @@ jobs:
       - name: Install dependencies
         run: ./gradlew clean build --no-daemon
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
+      #     - name: Cache Gradle dependencies
+      #       uses: actions/cache@v3
+      #       with:
+      #         path: |
+      #           ~/.gradle/caches
+      #           ~/.gradle/wrapper
+      #         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #         restore-keys: |
+      #           ${{ runner.os }}-gradle-
+      #
       - name: Run Detekt
         run: ./gradlew detekt --no-daemon
