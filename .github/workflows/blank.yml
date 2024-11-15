@@ -9,9 +9,6 @@ jobs:
     name: MR check
     runs-on: ubuntu-latest
     steps:
-      - name: Get local.properties from secrets
-        run: echo "${{secrets.LOCAL_PROPERTIES }}" > $GITHUB_WORKSPACE/local.properties
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -29,6 +26,11 @@ jobs:
 
       - name: Make gradlew permission executable
         run: chmod +x ./gradlew
+
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "api.key=${{ secrets.TMDB_API_KEY }}" >> local.properties
 
       - name: Install dependencies
         run: ./gradlew clean build --no-daemon
