@@ -9,6 +9,9 @@ jobs:
     name: MR check
     runs-on: ubuntu-latest
     environment: dev
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+      ACTIONS_STEP_DEBUG: true
 
     steps:
       - name: Checkout code
