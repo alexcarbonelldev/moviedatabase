@@ -3,6 +3,7 @@ package com.bd.data.remote
 import android.content.Context
 import com.bd.data.BuildConfig
 import com.bd.data.remote.adapter.ContentTypeAdapter
+import com.bd.data.remote.interceptor.ApiKeyInterceptor
 import com.bd.data.remote.interceptor.CacheInterceptor
 import com.bd.data.remote.model.ContentDto
 import com.google.gson.GsonBuilder
@@ -43,6 +44,7 @@ class RetrofitClient @Inject constructor(
                 addInterceptor(loggingInterceptor)
             }
             addInterceptor(CacheInterceptor())
+            addInterceptor(ApiKeyInterceptor())
         }.build()
     }
 

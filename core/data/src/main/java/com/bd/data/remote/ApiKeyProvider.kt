@@ -4,5 +4,5 @@ import com.bd.data.BuildConfig
 
 object ApiKeyProvider {
 
-    const val API_KEY_PARAM: String = "?api_key=${BuildConfig.TMDB_API_KEY}"
+    val API_KEY_PARAM: String get() = "?api_key=${BuildConfig.TMDB_API_KEY}"
 }
