@@ -32,9 +32,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bd.bd.feature.home.HomeScreen
+import com.bd.bd.feature.home.HomeViewState
 import com.bd.domain.model.ContentType
 import com.bd.ui.R
 import com.bd.ui.common.toDp
+import com.bd.ui.designsystem.AppPreview
+import com.bd.ui.designsystem.PreviewContainer
 import com.bd.ui.designsystem.component.AsyncImageUiComponent
 import com.bd.ui.designsystem.component.CardItemUiComponent
 import com.bd.ui.designsystem.component.CustomTopBarUiComponent
@@ -42,6 +46,7 @@ import com.bd.ui.designsystem.component.ErrorStateUiComponent
 import com.bd.ui.designsystem.component.LoadingStateUiComponent
 import com.bd.ui.designsystem.component.rating.RatingUiComponent
 import com.bd.ui.mvi.ViewEventObserver
+import okhttp3.MediaType
 
 private const val HEADER_BACKGROUND_HEIGHT = 300
 private const val SCROLL_HEIGHT = 160
@@ -62,6 +67,19 @@ fun DetailScreen(
         }
     }
 
+    DetailScreen(
+        viewState = viewState,
+        onBackClick = onBackClick,
+        onViewAction = { viewModel.onViewAction(it) }
+    )
+}
+
+@Composable
+private fun DetailScreen(
+    viewState: DetailViewState,
+    onBackClick: () -> Unit,
+    onViewAction: (DetailViewAction) -> Unit
+) {
     Crossfade(
         targetState = viewState,
         label = "detailScreenAnimation"
@@ -71,12 +89,12 @@ fun DetailScreen(
                 state,
                 onBackClick = onBackClick,
                 onRecommendedMediaClick = { id, mediaType ->
-                    viewModel.onViewAction(DetailViewAction.OnRecommendedMediaClick(id, mediaType))
+                    onViewAction(DetailViewAction.OnRecommendedMediaClick(id, mediaType))
                 }
             )
 
             is DetailViewState.Error -> ErrorStateUiComponent(
-                onRetryClick = { viewModel.onViewAction(DetailViewAction.OnRetryClick) }
+                onRetryClick = { onViewAction(DetailViewAction.OnRetryClick) }
             )
 
             is DetailViewState.Loading -> LoadingStateUiComponent()
@@ -258,5 +276,30 @@ private fun GenresRow(genres: List<String>) {
                 Spacer(modifier = Modifier.width(16.dp))
             }
         }
+    }
+}
+
+@AppPreview
+@Composable
+private fun Preview() {
+    val recommendedMediaUiModel = RecommendedMediaUiModel(
+        id = "1",
+        null,
+        9f,
+        mediaType = ContentType.Media.Movie
+    )
+    PreviewContainer {
+        DetailScreen(
+            DetailViewState.Content(
+                title = "Title",
+                description = "Description",
+                imageUrl = "",
+                backgroundImageUrl = "",
+                rating = 10f,
+                genres = listOf("Action", "Comedy"),
+                recommendations = listOf(recommendedMediaUiModel)
+            ),
+            onBackClick = {}
+        ) {}
     }
 }

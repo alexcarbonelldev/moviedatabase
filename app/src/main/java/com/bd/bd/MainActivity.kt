@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.bd.bd.feature.main.MainScreen
-import com.bd.bd.common.ui.theme.BooksDatabaseTheme
+import com.bd.ui.designsystem.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BooksDatabaseTheme {
+            AppTheme {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                     modifier = Modifier.fillMaxSize()

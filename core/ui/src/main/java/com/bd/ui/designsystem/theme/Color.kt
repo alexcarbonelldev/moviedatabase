@@ -1,4 +1,4 @@
-package com.bd.bd.common.ui.theme
+package com.bd.ui.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -47,7 +47,6 @@ private val searchTab = BottomBarItem(
 
 @Composable
 fun MainScreen() {
-
     val tabBarItems = listOf(homeTab, searchTab)
 
     val navController = rememberNavController()
