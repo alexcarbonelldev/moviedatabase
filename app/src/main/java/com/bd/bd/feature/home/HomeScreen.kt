@@ -22,6 +22,8 @@ import com.bd.domain.model.ContentType
 import com.bd.domain.model.Media
 import com.bd.domain.model.getType
 import com.bd.ui.R
+import com.bd.ui.designsystem.AppPreview
+import com.bd.ui.designsystem.PreviewContainer
 import com.bd.ui.designsystem.component.CardItemUiComponent
 import com.bd.ui.designsystem.component.ErrorStateUiComponent
 import com.bd.ui.designsystem.component.LoadingStateUiComponent
@@ -145,5 +147,15 @@ private fun Section(
                 }
             )
         }
+    }
+}
+
+@AppPreview
+@Composable
+private fun Preview() {
+    PreviewContainer {
+        HomeScreen(
+            HomeViewState.Content(emptyList(), emptyList())
+        ) {}
     }
 }

@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bd.ui.R
+import com.bd.ui.designsystem.AppPreview
 import com.bd.ui.designsystem.Icons
+import com.bd.ui.designsystem.PreviewContainer
 import com.bd.ui.designsystem.component.AsyncImageUiComponent
 import com.bd.ui.designsystem.component.ErrorStateUiComponent
 import com.bd.ui.designsystem.component.LoadingStateUiComponent
@@ -52,14 +54,25 @@ fun SearchScreen(
 
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
+    SearchScreen(
+        viewState = viewState,
+        onViewAction = { viewModel.onViewAction(it) }
+    )
+}
+
+@Composable
+private fun SearchScreen(
+    viewState: SearchViewState,
+    onViewAction: (SearchViewAction) -> Unit
+) {
     Column {
         SearchComponent(
             viewState = viewState,
-            onQueryChange = { viewModel.onViewAction(SearchViewAction.OnQueryChange(it)) },
+            onQueryChange = { onViewAction(SearchViewAction.OnQueryChange(it)) },
         )
         Results(
             viewState = viewState,
-            onViewAction = { viewModel.onViewAction(it) }
+            onViewAction = { onViewAction(it) }
         )
     }
 }
@@ -127,7 +140,14 @@ private fun ResultsContent(
             ) { i ->
                 ResultItem(
                     item = resultsState.results[i],
-                    onItemClick = { id, type -> onViewAction(SearchViewAction.OnItemClick(id, type)) }
+                    onItemClick = { id, type ->
+                        onViewAction(
+                            SearchViewAction.OnItemClick(
+                                id,
+                                type
+                            )
+                        )
+                    }
                 )
             }
         }
@@ -214,5 +234,30 @@ private fun Initial() {
             text = stringResource(R.string.search_placeholder),
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@AppPreview
+@Composable
+private fun Preview() {
+    val item = SearchResultUiModel(
+        id = "1",
+        title = "Title",
+        imageUrl = null,
+        type = ResultType.MOVIE
+    )
+    val searchResults = listOf(
+        item,
+        item.copy(id = "2", type = ResultType.TV_SHOW),
+        item.copy(id = "3", type = ResultType.PERSON),
+    )
+
+    PreviewContainer {
+        SearchScreen(
+            SearchViewState(
+                query = "Query",
+                ResultsState.Content(searchResults)
+            )
+        ) {}
     }
 }
